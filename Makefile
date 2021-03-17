@@ -3,8 +3,7 @@
 help :
 	@echo "fonts		: Install fonts"
 	@echo "bash 		: Setup Bash-it"
-	@echo "zsh 		: Setup ZSH"
-	@echo "ohmyzsh 	: Install Ohmyzsh with zsh themes and plugins"
+	@echo "zsh 		: Setup ZSH and ohmyzsh with required themes and plugins"
 
 # Checks
 git-exists: ; @which git > /dev/null
@@ -24,15 +23,10 @@ bash: git-exists
 	git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
 	echo 'N' | ~/.bash_it/install.sh
 
-# Install zsh
+# Install zsh, ohmyzsh
+# and required zsh themes and plugins
 zsh:
 	sudo apt-get install zsh
-
-# Install ohmyzsh
-# and required zsh themes and plugins
-ohmyzsh: zsh-exists
-	curl -o ohmyzsh.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-	chmod +x ohmyzsh.sh
-	echo 'N' | ./ohmyzsh.sh
+	echo 'N' | curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${HOME}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 	git clone https://github.com/zsh-users/zsh-autosuggestions "${HOME}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
