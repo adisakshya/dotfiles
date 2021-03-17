@@ -2,7 +2,7 @@
 
 help :
 	@echo "fonts		: Install fonts"
-	@echo "bash 		: Setup Bash-it with completions and plugins"
+	@echo "bash 		: Setup Bash-it"
 	@echo "zsh 		: Setup ZSH"
 	@echo "ohmyzsh 	: Install Ohmyzsh with zsh themes and plugins"
 
@@ -23,8 +23,6 @@ fonts: git-exists
 bash: git-exists
 	git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
 	echo 'N' | ~/.bash_it/install.sh
-	bash-it enable completion git npm makefile docker docker-compose docker-machine
-	bash-it enable plugin docker docker-compose docker-machine git
 
 # Install zsh
 zsh:
