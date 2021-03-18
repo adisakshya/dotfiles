@@ -23,10 +23,11 @@ bash: git-exists
 	git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
 	~/.bash_it/install.sh --no-modify-config
 
-# Install zsh, ohmyzsh
-# and required zsh themes and plugins
+# Install zsh, ohmyzsh with required zsh themes and plugins
+# and set default shell to zsh
 zsh:
 	sudo apt-get install zsh
 	echo 'N' | curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${HOME}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 	git clone https://github.com/zsh-users/zsh-autosuggestions "${HOME}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+	chsh -s $(which zsh)
