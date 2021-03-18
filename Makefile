@@ -21,7 +21,7 @@ fonts: git-exists
 # and required completions and plugins
 bash: git-exists
 	git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
-	echo 'N' | ~/.bash_it/install.sh
+	~/.bash_it/install.sh --no-modify-config
 
 # Install zsh, ohmyzsh
 # and required zsh themes and plugins
