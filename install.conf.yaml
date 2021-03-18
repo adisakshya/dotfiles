@@ -8,6 +8,7 @@
 
 - link:
     ~/.bashrc: bash/.bashrc
+    ~/.bash_profile: bash/.bash_profile
 
 ## Unix Links
 
