@@ -1,11 +1,23 @@
+- clean: ['~']
+
+## Common Links
+
 - defaults:
     link:
       relink: true
 
-- clean: ['~']
-
 - link:
     ~/.bashrc: bash/.bashrc
+
+## Unix Links
+
+- defaults:
+    link:
+      if: '[[ "$(uname)" == "linux-gnu" || "$(uname)" == "Darwin" ]]'
+      relink: true
+
+- link:
+    ~/.zshrc: zsh/.zshrc
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
