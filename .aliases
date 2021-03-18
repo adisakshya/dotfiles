@@ -1,1 +1,24 @@
-alias week='date +%V'
+# Digital Business Card :)
+alias adi='npx adisakshya'
+
+# Easier naviagtion
+alias ..="cd .."
+alias .2="cd ../.."
+alias .3="cd ../../.."
+alias .4="cd ../../../.."
+alias h="cd ~"
+
+# List all filesin long format
+alias l="ls -lhF"
+
+# List all files in long format, including dot files
+alias la="ls -lahF"
+
+# List only directories
+alias lsd="ls -lhF | grep '^d'"
+
+# Stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D" && date && time cat && date'
+
+# Public IP
+alias myip='curl ipinfo.io/ip'
