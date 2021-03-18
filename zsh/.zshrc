@@ -42,4 +42,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
+# Docker in WSL
+if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+    export DOCKER_HOST='tcp://192.168.99.100:2376'
+    export DOCKER_TLS_VERIFY=1
+    export DOCKER_CERT_PATH=/mnt/c/Users/USERNAME/.docker/machine/machines/default
+    export DOCKER_MACHINE_NAME=default
+fi
+
 source $ZSH/oh-my-zsh.sh
