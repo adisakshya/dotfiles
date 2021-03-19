@@ -112,7 +112,7 @@ export IRC_CLIENT='irssi'
 export TODO="t"
 
 # Set this to false to turn off version control status checking within the prompt for all themes
-export SCM_CHECK=true
+export SCM_CHECK=false
 
 # Enable display of last command duration
 export BASH_IT_COMMAND_DURATION=true
