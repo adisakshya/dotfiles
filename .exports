@@ -1,1 +1,15 @@
-export ping='pong'
+# Set bash as default shell
+shell="$(which bash)";
+
+# If using unix and zsh is installed, then
+# use zsh as default shell
+if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
+    if ! type "$zsh" > /dev/null; then
+        shell="$(which zsh)";
+    fi
+fi
+export SHELL="$shell";
+
+# Language preference
+export LANG="en_US.UTF-8";
+export LC_ALL="en_US.UTF-8";
