@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Clone bash-it repository
+git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+# Install bash-it and don't modify/create ~/.bashrc
+~/.bash_it/install.sh --no-modify-config
+
+# If unix environment
+if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
+    if type "$zsh" > /dev/null; then
+        # Install ZSH
+        sudo apt-get install zsh
+        # Instll ohmyzsh
+        echo 'N' | curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
+        # Install required themes and plugins
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${HOME}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+        git clone https://github.com/zsh-users/zsh-autosuggestions "${HOME}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+        # Set ZSH as default shell
+        chsh -s $(which zsh)
+    fi
+fi
