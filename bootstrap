@@ -15,7 +15,7 @@ git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
 
 # If unix environment
 if [[ "$(uname)" == "Linux" ]]; then
-    if ! type "$foobar_command_name" > /dev/null; then
+    if ! type "$zsh" > /dev/null; then
         echo 'Installing ZSH'
         # Install ZSH
         sudo apt-get install zsh
