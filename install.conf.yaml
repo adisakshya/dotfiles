@@ -14,7 +14,7 @@
 
 - defaults:
     link:
-      if: '[[ "$(uname)" == "linux-gnu" || "$(uname)" == "Darwin" ]]'
+      if: '[[ "$(uname)" == "Linux" || "$(uname)" == "Darwin" ]]'
       relink: true
 
 - link:
