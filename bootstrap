@@ -23,6 +23,8 @@ if [[ "$(uname)" == "Linux" ]]; then
         echo 'Installing ohmyzsh - https://github.com/ohmyzsh/ohmyzsh'
         echo 'N' | curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
         # Install required themes and plugins
+        git clone https://github.com/denysdovhan/spaceship-prompt.git "$HOME/.oh-my-zsh/themes/spaceship-prompt" --depth=1
+        ln -s "$$HOME/.oh-my-zsh/themes/spaceship-prompt/spaceship.zsh-theme" "$$HOME/.oh-my-zsh/themes/spaceship.zsh-theme" 
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${HOME}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
         git clone https://github.com/zsh-users/zsh-autosuggestions "${HOME}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     fi
