@@ -1,16 +1,26 @@
 #!/usr/bin/env bash
 
+# Setup fonts
+if [[ "$(uname)" == "Linux" ]]; then
+    echo 'Installing FiraCode - https://github.com/tonsky/FiraCode'
+    echo 'To use the font in vscode terminal please set terminal-font in preferences to `Fira Code`'
+    sudo apt install fonts-firacode
+fi
+
 # Clone bash-it repository
+echo 'Installing Bash-it - https://github.com/Bash-it/bash-it'
 git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
 # Install bash-it and don't modify/create ~/.bashrc
 ~/.bash_it/install.sh --no-modify-config
 
 # If unix environment
-if [[ "$(uname)" == "Linux" || "$(uname)" == "Darwin" ]]; then
+if [[ "$(uname)" == "Linux" ]]; then
     if ! type "$foobar_command_name" > /dev/null; then
+        echo 'Installing ZSH'
         # Install ZSH
         sudo apt-get install zsh
         # Instll ohmyzsh
+        echo 'Installing ohmyzsh - https://github.com/ohmyzsh/ohmyzsh'
         echo 'N' | curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
         # Install required themes and plugins
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${HOME}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
