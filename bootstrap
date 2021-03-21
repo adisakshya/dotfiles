@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# Setup fonts
-if [[ "$(uname)" == "Linux" ]]; then
-    echo 'Installing FiraCode - https://github.com/tonsky/FiraCode'
-    echo 'To use the font in vscode terminal please set terminal-font in preferences to `Fira Code`'
-    sudo apt install fonts-firacode
-fi
-
 # Clone bash-it repository
 echo 'Installing Bash-it - https://github.com/Bash-it/bash-it'
 git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
