@@ -9,7 +9,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
-ZSH_THEME="gozilla"
+# ZSH_THEME="gozilla" # Disabled theme
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -48,3 +48,5 @@ if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
 fi
 
 source $ZSH/oh-my-zsh.sh
+
+export PROMPT="%{$fg_bold[red]%}%n %{$fg_bold[white]%}in %{$fg_bold[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}%{$fg_bold[white]%}~> "
