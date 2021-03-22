@@ -25,3 +25,6 @@ alias myip='curl ipinfo.io/ip'
 
 # Simple HTTP Server
 alias httpserve='python -m http.server'
+
+# Weather
+alias weather='curl wttr.in'
