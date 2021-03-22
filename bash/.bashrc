@@ -23,48 +23,6 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -97,7 +55,7 @@ export BASH_IT="$HOME/.bash_it"
 
 # Lock and Load a custom theme file
 # location /.bash_it/themes/
-export BASH_IT_THEME='bobby'
+# export BASH_IT_THEME='robbyrussell' # Disabled bash-it theme
 
 # Your place for hosting Git repos. I use this for private repos
 export GIT_HOSTING='git@git.domain.com'
@@ -125,3 +83,16 @@ export COMMAND_DURATION_MIN_SECONDS=1
 
 # Load Bash It
 source "$BASH_IT"/bash_it.sh
+
+# Bash prompt
+if [[ "$(uname)" == "MINGW"* ]]; then
+    # Windows
+    __PS1_BEFORE='\n'
+    __PS1_LOCATION='\033[1;36m\W'
+    __PS1_GIT_BRANCH='\033[1;32m`__git_ps1`'
+    __PS1_AFTER='\033[1;37m $ '
+    export PROMPT_COMMAND='PS1="${__PS1_BEFORE}${__PS1_LOCATION}${__PS1_GIT_BRANCH}${__PS1_AFTER}"'
+elif [[ "$(uname)" == "Linux" ]]; then
+    # Linux
+    source ~/.bash_prompt
+fi

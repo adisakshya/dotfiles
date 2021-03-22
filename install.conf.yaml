@@ -19,6 +19,7 @@
 
 - link:
     ~/.zshrc: zsh/.zshrc
+    ~/.bash_prompt: bash/.bash_prompt
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
