@@ -9,6 +9,8 @@
 - link:
     ~/.bashrc: bash/.bashrc
     ~/.bash_profile: bash/.bash_profile
+    ~/.aliases: .aliases
+    ~/.exports: .exports
 
 ## Unix Links
 
