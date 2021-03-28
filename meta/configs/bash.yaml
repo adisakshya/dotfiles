@@ -1,0 +1,4 @@
+- link:
+    ~/.bashrc: bash/.bashrc
+    ~/.bash_profile: bash/.bash_profile
+    ~/.bash_prompt: bash/.bash_prompt

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+BASE_CONFIG="base"
+CONFIG_SUFFIX=".yaml"
+
+META_DIR="meta"
+CONFIG_DIR="configs"
+PROFILES_DIR="profiles"
+
+DOTBOT_DIR="dotbot"
+DOTBOT_BIN="bin/dotbot"
+
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+git submodule update --init --recursive --remote
+
+IFS=$'\n' read -d '' -r -a lines < "${BASE_DIR}/${META_DIR}/${PROFILES_DIR}/$1"
+for config in ${lines[@]}; do
+    echo -e "\nConfigure $config"
+    configFile="$(mktemp)"
+    profileConfigName=${config//[$'\t\r\n']} && CLEANED=${CLEANED%%*( )}
+    cat "${BASE_DIR}/${META_DIR}/${BASE_CONFIG}${CONFIG_SUFFIX}" >> $configFile
+    cat "${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${profileConfigName}${CONFIG_SUFFIX}" >> $configFile
+    cmd=("${BASE_DIR}/${META_DIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASE_DIR}" -c "$configFile")
+    "${cmd[@]}"
+    rm -f "$configFile"
+done
+
+cd "${BASE_DIR}"
