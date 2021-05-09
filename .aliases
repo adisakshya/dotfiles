@@ -31,3 +31,8 @@ alias weather='curl wttr.in'
 
 # Remote playground
 alias playground='python -m webbrowser -t "https://colab.research.google.com/github/adisakshya/playground/blob/master/remote/playground.ipynb"'
+
+# Jekyll
+alias bi='bundle install'
+alias bb='bundle exec jekyll build'
+alias bs='bundle exec jekyll serve'
