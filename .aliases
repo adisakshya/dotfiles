@@ -36,3 +36,7 @@ alias playground='python -m webbrowser -t "https://colab.research.google.com/git
 alias bi='bundle install'
 alias bb='bundle exec jekyll build'
 alias bs='bundle exec jekyll serve'
+
+# Jupyter
+alias jl='py -m jupyterlab'
+alias jn='py -m notebook'
