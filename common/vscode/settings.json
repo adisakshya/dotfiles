@@ -1,0 +1,48 @@
+{
+    // Editor
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay",
+    "explorer.confirmDelete": false,
+    "editor.suggestSelection": "first",
+    
+    // Workbench
+    "workbench.startupEditor": "welcomePageInEmptyWorkbench",
+    "workbench.colorTheme": "GitHub Dark",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.list.smoothScrolling": true,
+    
+    // Terminal
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.tabs.enabled": true,
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.profiles.windows": {
+        "Git Bash": {
+          "source": "Git Bash",
+          "icon": "terminal-bash"
+        },
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        }
+    },
+
+    // Language specific
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "python.languageServer": "Microsoft",
+    
+    // Extensions
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "liveServer.settings.donotShowInfoMsg": true,
+    "git.ignoreWindowsGit27Warning": true,
+    "codetour.showMarkers": true
+}

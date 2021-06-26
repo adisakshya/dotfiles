@@ -1,0 +1,82 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+
+$schema: https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+terminal_background: '#FFFFFF'
+blocks:
+# prompt
+- type: prompt
+  alignment: left
+  segments:
+  # username
+  - type: session
+    style: plain
+    foreground: '#FFBD59'
+    properties:
+      display_host: false
+  - type: text
+    style: plain
+    foreground: '#FFFFFF'
+    properties:
+      prefix: ''
+      postfix: ''
+      text: in
+  # current working directory
+  - type: path
+    style: plain
+    foreground: '#4DEFFF'
+    properties:
+      style: folder
+      enable_hyperlink: true
+  # git
+  - type: git
+    style: plain
+    foreground: '#FFFFFF'
+    properties:
+      branch_icon: ''
+      display_status: false
+      postfix: <#5FAAE8>)</>
+      prefix: <#5FAAE8>(</>
+
+# right-prompt
+- type: prompt
+  alignment: right
+  segments:
+  # shell
+  - type: shell
+    style: plain
+    foreground: '#FFD93F'
+  - type: text
+    style: plain
+    foreground: '#FFFFFF'
+    properties:
+      prefix: ''
+      postfix: ''
+      text: '@'
+  # os
+  - type: os
+    style: plain
+    foreground: '#F259FF'
+    properties:
+      macos: mac
+      windows: windows
+      linux: linux
+      display_distro_name: true
+  # time
+  - type: time
+    style: plain
+    foreground: '#66F68F'
+    properties:
+      prefix: '['
+      postfix: ']'
+      time_format: 'Mon Jan 2 15:04 MST'
+
+# input-prompt
+- type: prompt
+  alignment: left
+  newline: true
+  segments:
+  # input prompt
+  - type: text
+    style: plain
+    properties:
+      text: <#F259FF>❯</><#4DFF8F>❯</>

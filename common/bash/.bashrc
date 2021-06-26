@@ -50,49 +50,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Path to the bash-it configuration
-export BASH_IT="$HOME/.bash_it"
-
-# Lock and Load a custom theme file
-# location /.bash_it/themes/
-# export BASH_IT_THEME='robbyrussell' # Disabled bash-it theme
-
-# Your place for hosting Git repos. I use this for private repos
-export GIT_HOSTING='git@git.domain.com'
-
-# Don't check mail when opening terminal.
-unset MAILCHECK
-
-# Change this to your console based IRC client of choice
-export IRC_CLIENT='irssi'
-
-# Set this to the command you use for todo.txt-cli
-export TODO="t"
-
-# Set this to false to turn off version control status checking within the prompt for all themes
-export SCM_CHECK=false
-
-# Enable display of last command duration
-export BASH_IT_COMMAND_DURATION=true
-export COMMAND_DURATION_MIN_SECONDS=1
-
-
-# (Advanced): Uncomment this to make Bash-it reload itself automatically
-# after enabling or disabling aliases, plugins, and completions.
-# export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=1
-
-# Load Bash It
-source "$BASH_IT"/bash_it.sh
-
-# Bash prompt
-if [[ "$(uname)" == "MINGW"* ]]; then
-    # Windows
-    __PS1_BEFORE='\n'
-    __PS1_LOCATION='\033[1;36m\W'
-    __PS1_GIT_BRANCH='\033[1;32m`__git_ps1`'
-    __PS1_AFTER='\033[1;37m $ '
-    export PROMPT_COMMAND='PS1="${__PS1_BEFORE}${__PS1_LOCATION}${__PS1_GIT_BRANCH}${__PS1_AFTER}"'
-elif [[ "$(uname)" == "Linux" ]]; then
-    # Linux
-    source ~/.bash_prompt
-fi
+# Set oh-my-posh prompt
+eval "$(oh-my-posh --init --shell bash --config ~/adisakshya.yaml)"

@@ -47,6 +47,7 @@ if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
     export DOCKER_MACHINE_NAME=default
 fi
 
-source $ZSH/oh-my-zsh.sh
+# Set oh-my-posh prompt
+eval "$(oh-my-posh --init --shell zsh --config ~/adisakshya.yaml)"
 
-export PROMPT="%{$fg_bold[red]%}%n %{$fg_bold[white]%}in %{$fg_bold[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}%{$fg_bold[white]%}~> "
+source $ZSH/oh-my-zsh.sh

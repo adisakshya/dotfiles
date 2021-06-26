@@ -10,10 +10,6 @@
 - create:
     - $HOME/.config
 
-- link:
-    ~/.aliases: .aliases
-    ~/.exports: .exports
-
 - clean:
     $HOME:
         force: true
