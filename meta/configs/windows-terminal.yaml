@@ -1,2 +1,5 @@
 - link:
+    # Windows Terminal
     $HOME/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json: windows/windows-terminal/settings.json
+    # Windows Terminal Preview
+    $HOME/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json: windows/windows-terminal/settings.json
