@@ -10,12 +10,13 @@ help :
 # Windows
 
 bootstrap-windows:
-	@echo "Install Powerline font - Source Code Pro - https://github.com/powerline/fonts"
-	./common/fonts/install.ps1
+	@echo "-> Installing Powerline font Source Code Pro - https://github.com/powerline/fonts"
+	powershell common/fonts/prerequisite.ps1
+	powershell common/fonts/install.ps1
 	@echo "-> Installing Scoop - https://github.com/lukesampson/scoop"
-	iwr -useb get.scoop.sh | iex
+	powershell 'iwr -useb get.scoop.sh | iex'
 	@echo "-> Installing oh-my-posh - https://ohmyposh.dev"
-	scoop install 'https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json'
+	powershell "scoop install 'https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json'"
 
 win: bootstrap-windows
 	./install-profile windows
@@ -24,7 +25,7 @@ win: bootstrap-windows
 
 bootstrap-linux:
 	@echo "Install Powerline font - Source Code Pro - https://github.com/powerline/fonts"
-	./common/fonts/install.sh
+	sh common/fonts/install.sh
 	@echo "-> Installing oh-my-posh - https://ohmyposh.dev"
 	sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
 	sudo chmod +x /usr/local/bin/oh-my-posh
