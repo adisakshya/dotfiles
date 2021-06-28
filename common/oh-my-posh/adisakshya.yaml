@@ -12,6 +12,7 @@ blocks:
     foreground: '#FFBD59'
     properties:
       prefix: ''
+      default_user_name: 'anonymous'
       display_host: false
   - type: text
     style: plain
