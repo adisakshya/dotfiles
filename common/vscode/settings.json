@@ -14,7 +14,7 @@
     "workbench.list.smoothScrolling": true,
     
     // Terminal
-    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
     "terminal.integrated.tabs.enabled": true,
     "terminal.integrated.fontFamily": "'Source Code Pro for Powerline'",
     "terminal.integrated.fontSize": 13,
