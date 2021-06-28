@@ -1,7 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 
 $schema: https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
-terminal_background: '#FFFFFF'
 blocks:
 # prompt
 - type: prompt
@@ -12,6 +11,7 @@ blocks:
     style: plain
     foreground: '#FFBD59'
     properties:
+      prefix: ''
       display_host: false
   - type: text
     style: plain
@@ -79,4 +79,5 @@ blocks:
   - type: text
     style: plain
     properties:
+      prefix: ''
       text: <#F259FF>❯</><#4DFF8F>❯</>
