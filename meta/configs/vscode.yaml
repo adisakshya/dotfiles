@@ -1,0 +1,13 @@
+- link:
+    # Windows
+    $HOME/AppData/Roaming/Code/User/settings.json:
+        if: '[ `uname -o` = Msys ]'
+        path: common/vscode/settings.json
+    # Linux
+    $HOME/.config/Code/User/settings.json:
+        if: '[ `uname -o` = GNU/Linux ]'
+        path: common/vscode/settings.json
+    # Code Server
+    $HOME/.local/share/code-server/User/settings.json:
+        if: 'type "code-server" > /dev/null'
+        path: common/vscode/settings.json
