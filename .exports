@@ -1,3 +1,6 @@
+# set USER
+export USER="$(whoami)";
+
 # Set bash as shell
 shell="$(which bash)";
 
