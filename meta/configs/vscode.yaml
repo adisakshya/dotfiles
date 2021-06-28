@@ -1,7 +1,8 @@
 - link:
     # Windows
     $HOME/AppData/Roaming/Code/User/settings.json:
-        if: '[ `uname -o` = Msys ]'
+        # if not debian
+        if: '[ ! -f "/etc/debian_version" ]'
         path: common/vscode/settings.json
     # Linux
     $HOME/.config/Code/User/settings.json:
