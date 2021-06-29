@@ -1,11 +1,6 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "copyFormatting": "none",
-    "copyOnSelect": false,
-    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-    "disableAnimations": false,
-    "focusFollowMouse": false,
-    "keybindings": 
+    "actions": 
     [
         {
             "command": 
@@ -16,12 +11,16 @@
             "keys": "ctrl+c"
         },
         {
+            "command": "find",
+            "keys": "ctrl+f"
+        },
+        {
             "command": "paste",
             "keys": "ctrl+v"
         },
         {
-            "command": "find",
-            "keys": "ctrl+f"
+            "command": "newTab",
+            "keys": "ctrl+t"
         },
         {
             "command": 
@@ -33,6 +32,11 @@
             "keys": "alt+shift+d"
         }
     ],
+    "copyFormatting": "none",
+    "copyOnSelect": false,
+    "defaultProfile": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+    "disableAnimations": false,
+    "focusFollowMouse": false,
     "profiles": 
     {
         "defaults": 
