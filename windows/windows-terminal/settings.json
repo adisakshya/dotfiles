@@ -42,6 +42,7 @@
             "fontFace": "Source Code Pro for Powerline",
             "fontSize": 11,
             "fontWeight": "semi-bold",
+            "padding": "20, 10, 8, 10",
             "startingDirectory": "D:\\projects",
             "unfocusedAppearance": 
             {
