@@ -19,7 +19,10 @@
             "keys": "ctrl+v"
         },
         {
-            "command": "newTab",
+            "command": 
+            {
+                "action": "newTab"
+            },
             "keys": "ctrl+t"
         },
         {
@@ -78,7 +81,8 @@
                 "hidden": false,
                 "name": "Ubuntu",
                 "source": "Windows.Terminal.Wsl",
-                "unfocusedAppearance": {
+                "unfocusedAppearance": 
+                {
                     "colorScheme": "Ubuntu"
                 }
             },
