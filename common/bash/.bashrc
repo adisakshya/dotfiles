@@ -52,3 +52,6 @@ export NVM_DIR="$HOME/.nvm"
 
 # Set oh-my-posh prompt
 eval "$(oh-my-posh --init --shell bash --config ~/adisakshya.yaml)"
+
+# Disable highlighting
+LS_COLORS=$LS_COLORS:'ow=1;34:' ; export LS_COLORS
