@@ -1,6 +1,9 @@
 # Default target
 .DEFAULT_GOAL := help
 
+# PHONY
+.PHONY: windows linux
+
 # Targets
 
 help :
@@ -18,7 +21,7 @@ bootstrap-windows:
 	@echo "-> Installing oh-my-posh - https://ohmyposh.dev"
 	powershell "scoop install 'https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json'"
 
-win: bootstrap-windows
+windows: bootstrap-windows
 	./install-profile windows
 
 # Linux
@@ -36,5 +39,5 @@ bootstrap-linux:
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${HOME}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 	git clone https://github.com/zsh-users/zsh-autosuggestions "${HOME}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
 
-lin: bootstrap-linux
+linux: bootstrap-linux
 	./install-profile linux

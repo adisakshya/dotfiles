@@ -26,13 +26,13 @@ After installing these prerequisites the symlinks are created for the chosen pro
 ### On Windows
 
 ```bash
-make win
+make windows
 ```
 
 ### On Linux
 
 ```bash
-make lin
+make linux
 ```
 
 ### Installing a predefined profile
