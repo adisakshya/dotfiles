@@ -45,5 +45,12 @@
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "liveServer.settings.donotShowInfoMsg": true,
     "git.ignoreWindowsGit27Warning": true,
-    "codetour.showMarkers": true
+    "codetour.showMarkers": true,
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }
