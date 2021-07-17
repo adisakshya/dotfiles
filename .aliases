@@ -49,3 +49,6 @@ alias bs='bundle exec jekyll serve'
 # Jupyter
 alias jl='py -m jupyterlab'
 alias jn='py -m notebook'
+
+# Extract .tar.gz
+alias extract='tar -xvzf'
