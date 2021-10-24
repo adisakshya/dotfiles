@@ -1,4 +1,5 @@
 {
+    "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "actions": 
     [
@@ -44,11 +45,14 @@
     {
         "defaults": 
         {
-            "acrylicOpacity": 0.3,
             "experimental.retroTerminalEffect": false,
-            "fontFace": "Source Code Pro for Powerline",
-            "fontSize": 11,
-            "fontWeight": "semi-bold",
+            "font": 
+            {
+                "face": "Source Code Pro for Powerline",
+                "size": 11,
+                "weight": "semi-bold"
+            },
+            "opacity": 30,
             "padding": "20, 10, 8, 10",
             "startingDirectory": "D:\\projects",
             "unfocusedAppearance": 
@@ -99,6 +103,18 @@
                 "name": "Bash",
                 "source": "Git",
                 "unfocusedAppearance": {}
+            },
+            {
+                "colorScheme": "Recording Palette",
+                "commandline": "C:/Program Files/Git/bin/bash.exe -i -l",
+                "guid": "{47cb2d64-6d01-4cab-a00f-436a9a7cfb08}",
+                "hidden": false,
+                "icon": "C:/Program Files/Git/mingw64/share/git/git-for-windows.ico",
+                "name": "Recording Dark",
+                "opacity": 100,
+                "tabTitle": "Adisakshya's Business Card",
+                "unfocusedAppearance": {},
+                "useAcrylic": false
             }
         ]
     },
@@ -264,6 +280,29 @@
             "selectionBackground": "#FFFFFF",
             "white": "#FAFAFA",
             "yellow": "#C18301"
+        },
+        {
+            "background": "#323030",
+            "black": "#0C0C0C",
+            "blue": "#0037DA",
+            "brightBlack": "#767676",
+            "brightBlue": "#3B78FF",
+            "brightCyan": "#61D6D6",
+            "brightGreen": "#16C60C",
+            "brightPurple": "#B4009E",
+            "brightRed": "#E74856",
+            "brightWhite": "#F2F2F2",
+            "brightYellow": "#F9F1A5",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#3A96DD",
+            "foreground": "#FFFFFF",
+            "green": "#13A10E",
+            "name": "Recording Palette",
+            "purple": "#881798",
+            "red": "#C50F1F",
+            "selectionBackground": "#FFFFFF",
+            "white": "#FFFFFF",
+            "yellow": "#C19C00"
         },
         {
             "background": "#002B36",
@@ -449,5 +488,6 @@
             "white": "#C0C0C0",
             "yellow": "#808000"
         }
-    ]
+    ],
+    "useAcrylicInTabRow": false
 }
