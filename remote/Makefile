@@ -51,10 +51,6 @@ code: bootstrap
 	curl https://github.com/adisakshya/extension-pack/releases/latest/download/adisakshya-extension-pack.vsix -O -L
 	code-server --install-extension adisakshya-extension-pack.vsix
 	@echo "-> Extension Pack installation complete"
-	@echo "-> Starting Code Server"
-	nohup code-server --port 8000 > logs/code_server.out 2> logs/code_server.err &
-	@echo "-> Code Server Config"
-	cat ~/.config/code-server/config.yaml
 
 # Install Jekyll
 jekyll:
