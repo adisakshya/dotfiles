@@ -52,3 +52,6 @@ alias jn='py -m notebook'
 
 # Extract .tar.gz
 alias extract='tar -xvzf'
+
+# Expose port using localtunnel
+alias expose='function expose_port(){ nohup lt --port &1 > logs/$2.out 2> logs/$2.err & };expose_port && cat $2.out'
