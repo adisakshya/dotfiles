@@ -40,8 +40,6 @@ bootstrap:
 	wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
 	unzip ngrok-stable-linux-amd64.zip
 	@echo "--> ngrok installtion complete"
-	@echo "-> Creating directory to contain log files"
-	@mkdir logs
 	@echo "-> Bootstrap Complete"
 
 # Install Code Server
@@ -57,10 +55,6 @@ code: bootstrap
 	nohup code-server --port 8000 > logs/code_server.out 2> logs/code_server.err &
 	@echo "-> Code Server Config"
 	cat ~/.config/code-server/config.yaml
-	@echo "-> Exposing Code Server using localtunnel"
-	nohup lt --port 8000 > logs/cdr_tunnel.out 2> logs/cdr_tunnel.err &
-	@echo "-> Code Server is now ready to use on"
-	cat logs/cdr_tunnel.out
 
 # Install Jekyll
 jekyll:
