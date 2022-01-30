@@ -57,17 +57,14 @@ jekyll:
 	@echo "-> Installing Ruby"
 	sudo apt update
 	sudo apt-get install ruby-full patch zlib1g-dev build-essential -y
-	@echo "-> Creating Jekyll user"
-	useradd jekyll
 	@echo "-> Setting environment"
-	echo '# Install Ruby Gems to ~/gems' >> ~/.bashrc
-	echo 'export GEM_HOME="$HOME/gems"' >> ~/.bashrc
-	echo 'export PATH="$HOME/gems/bin:$PATH"' >> ~/.bashrc
-	source ~/.bashrc
+	@echo '# Install Ruby Gems to ~/gems' >> ~/.bashrc
+	@echo 'export GEM_HOME="${HOME}/gems"' >> ~/.bashrc
+	@echo 'export PATH="${HOME}/gems/bin:{$PATH}"' >> ~/.bashrc
+	. ~/.bashrc
 	@echo "-> Installing Jekyll and Bundler"
 	gem install jekyll bundler
 	@echo "-> Jekyll installtion complete"
-
 
 # Install Docker
 docker:
