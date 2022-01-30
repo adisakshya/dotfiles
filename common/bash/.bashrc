@@ -55,3 +55,7 @@ eval "$(oh-my-posh --init --shell bash --config ~/adisakshya.yaml)"
 
 # Disable highlighting
 LS_COLORS=$LS_COLORS:'ow=1;34:' ; export LS_COLORS
+
+# Install Ruby Gems to ~/gems'
+export GEM_HOME="${HOME}/gems" >> ~/.bashrc
+export PATH="${HOME}/gems/bin:${PATH}" >> ~/.bashrc
