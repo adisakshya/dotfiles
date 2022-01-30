@@ -60,7 +60,7 @@ jekyll:
 	@echo "-> Setting environment"
 	@echo '# Install Ruby Gems to ~/gems' >> ~/.bashrc
 	@echo 'export GEM_HOME="${HOME}/gems"' >> ~/.bashrc
-	@echo 'export PATH="${HOME}/gems/bin:{$PATH}"' >> ~/.bashrc
+	@echo 'export PATH="${HOME}/gems/bin:${PATH}"' >> ~/.bashrc
 	. ~/.bashrc
 	@echo "-> Installing Jekyll and Bundler"
 	gem install jekyll bundler
