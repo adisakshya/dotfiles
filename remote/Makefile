@@ -45,7 +45,7 @@ bootstrap:
 	@echo "-> Bootstrap Complete"
 
 # Install Code Server
-code: init
+code: bootstrap
 	@echo "-> Installing Code Server - https://github.com/cdr/code-server"
 	curl -fsSL https://code-server.dev/install.sh | sh
 	@echo "-> Code Server installtion complete"
