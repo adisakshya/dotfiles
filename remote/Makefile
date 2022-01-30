@@ -41,7 +41,7 @@ bootstrap:
 	unzip ngrok-stable-linux-amd64.zip
 	@echo "--> ngrok installtion complete"
 	@echo "-> Creating directory to contain log files"
-	mkdir logs
+	@mkdir logs
 	@echo "-> Bootstrap Complete"
 
 # Install Code Server
