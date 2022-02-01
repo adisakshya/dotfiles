@@ -18,7 +18,7 @@ bootstrap:
 	@echo "-> Bootstraping Environment"
 	sudo apt update
 	@echo "--> Installing required tools and utilities"
-	apt install \
+	sudo apt install \
 		build-essential \
 		httpie \
 		nano \

@@ -1,0 +1,30 @@
+dist: xenial
+language: node_js
+node_js:
+  - 12
+
+stages:
+  - build
+  - test
+
+jobs:
+  include:
+    - stage: build
+      name: Install Dotfiles for Linux
+      script:
+        # Install Dotfiles
+        - chmod +x ./install-profile
+        - make linux
+    - stage: test
+      name: Test script for system bootstrap & code server installation
+      script:
+        # Install Code Server
+        - make code -C ./remote
+    - stage: test
+      name: Test installer script for - jekyll
+      script:
+        # Install Jekyll
+        - make jekyll -C ./remote
+
+notifications:
+  email: false
