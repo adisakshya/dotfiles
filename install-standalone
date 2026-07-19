@@ -3,6 +3,7 @@
 set -e
 
 BASE_CONFIG="base"
+FORCE_CONFIG="force-links-after-backup"
 CONFIG_SUFFIX=".yaml"
 
 META_DIR="meta"
@@ -14,14 +15,40 @@ DOTBOT_BIN="bin/dotbot"
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+dry_run=false
+if [[ ${1:-} == "--dry-run" || ${1:-} == "--check" ]]; then
+    dry_run=true
+    shift
+fi
+
+if (( $# == 0 )); then
+    echo "Usage: $0 [--dry-run|--check] <config>..." >&2
+    exit 2
+fi
+
+config_files=()
+for config in "$@"; do
+    suffix="-sudo"
+    config_files+=("${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${config%"$suffix"}${CONFIG_SUFFIX}")
+done
+
+if $dry_run; then
+    "${BASE_DIR}/scripts/backup-dotfiles" --dry-run "${config_files[@]}"
+    printf 'Would install configs: %s\n' "$*"
+    exit 0
+fi
 
 cd "${BASE_DIR}"
 git submodule update --init --recursive --remote
 
-for config in ${@}; do
+"${BASE_DIR}/scripts/backup-dotfiles" "${config_files[@]}"
+
+for config in "$@"; do
     configFile="$(mktemp)"
     suffix="-sudo"
-    echo -e "$(<"${BASE_DIR}/${META_DIR}/${BASE_CONFIG}${CONFIG_SUFFIX}")\n$(<"${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${config%"$suffix"}${CONFIG_SUFFIX}")" > "$configFile"
+    cat "${BASE_DIR}/${META_DIR}/${BASE_CONFIG}${CONFIG_SUFFIX}" > "$configFile"
+    cat "${BASE_DIR}/${META_DIR}/${FORCE_CONFIG}${CONFIG_SUFFIX}" >> "$configFile"
+    cat "${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${config%"$suffix"}${CONFIG_SUFFIX}" >> "$configFile"
 
     cmd=("${BASE_DIR}/${META_DIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASE_DIR}" -c "$configFile")
 

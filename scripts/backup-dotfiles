@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: $0 [--dry-run] <config.yaml>..." >&2
+}
+
+dry_run=false
+if [[ ${1:-} == "--dry-run" ]]; then
+    dry_run=true
+    shift
+fi
+
+if (( $# == 0 )); then
+    usage
+    exit 2
+fi
+
+timestamp="$(date -u +%Y%m%dT%H%M%SZ)-$$"
+backup_root="${DOTFILES_BACKUP_DIR:-${HOME}/.dotfiles-backups}/${timestamp}"
+declare -A seen=()
+
+expand_destination() {
+    local destination=$1
+
+    destination=${destination/#\~\//$HOME/}
+    destination=${destination/#\$HOME\//$HOME/}
+    printf '%s\n' "$destination"
+}
+
+backup_destination() {
+    local destination=$1 relative backup
+
+    [[ -e $destination || -L $destination ]] || return 0
+    [[ ${seen[$destination]+yes} ]] && return 0
+    seen[$destination]=1
+
+    if [[ $destination == "$HOME"/* ]]; then
+        relative=${destination#"$HOME"/}
+    else
+        relative="external/${destination#/}"
+    fi
+    backup="${backup_root}/${relative}"
+
+    if $dry_run; then
+        printf 'Would back up %s to %s\n' "$destination" "$backup"
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$backup")"
+    cp -a -- "$destination" "$backup"
+    printf 'Backed up %s to %s\n' "$destination" "$backup"
+}
+
+for config in "$@"; do
+    [[ -f $config ]] || { echo "Config not found: $config" >&2; exit 1; }
+
+    while IFS= read -r destination; do
+        backup_destination "$(expand_destination "$destination")"
+    done < <(
+        awk '
+            /^- link:[[:space:]]*$/ { in_link = 1; next }
+            /^- / { in_link = 0 }
+            in_link && /^    [^ #][^:]*:[[:space:]]*/ {
+                line = $0
+                sub(/^    /, "", line)
+                sub(/:[[:space:]]*.*$/, "", line)
+                print line
+            }
+        ' "$config"
+    )
+done
