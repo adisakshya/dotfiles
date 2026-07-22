@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 BASE_CONFIG="base"
 FORCE_CONFIG="force-links-after-backup"
@@ -14,6 +14,7 @@ DOTBOT_DIR="dotbot"
 DOTBOT_BIN="bin/dotbot"
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CALLER_HOME=$HOME
 
 dry_run=false
 if [[ ${1:-} == "--dry-run" || ${1:-} == "--check" ]]; then
@@ -52,8 +53,11 @@ for config in "$@"; do
 
     cmd=("${BASE_DIR}/${META_DIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASE_DIR}" -c "$configFile")
 
-    if [[ $config == *"sudo"* ]]; then
-        cmd=(sudo "${cmd[@]}")
+    if [[ $config == *-sudo ]]; then
+        # Dotbot must resolve $HOME exactly as the backup step did. Passing the
+        # caller's value explicitly prevents sudo's HOME reset from changing
+        # the force-link destinations after they have been backed up.
+        cmd=(sudo HOME="$CALLER_HOME" "${cmd[@]}")
     fi
 
     "${cmd[@]}"

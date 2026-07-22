@@ -56,9 +56,7 @@ backup_destination() {
 for config in "$@"; do
     [[ -f $config ]] || { echo "Config not found: $config" >&2; exit 1; }
 
-    while IFS= read -r destination; do
-        backup_destination "$(expand_destination "$destination")"
-    done < <(
+    mapfile -t destinations < <(
         awk '
             /^- link:[[:space:]]*$/ { in_link = 1; next }
             /^- / { in_link = 0 }
@@ -70,4 +68,13 @@ for config in "$@"; do
             }
         ' "$config"
     )
+
+    if [[ -s $config && ${#destinations[@]} -eq 0 ]]; then
+        echo "No link destinations could be parsed from non-empty config: $config" >&2
+        exit 1
+    fi
+
+    for destination in "${destinations[@]}"; do
+        backup_destination "$(expand_destination "$destination")"
+    done
 done

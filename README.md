@@ -58,6 +58,10 @@ relative to your home directory. Installation stops if a backup cannot be
 created. Forced replacement is enabled only by the installers, after this
 backup succeeds.
 
+For standalone configs ending in `-sudo`, the installer explicitly preserves
+the caller's `HOME` for Dotbot so privileged linking targets the same paths that
+were backed up.
+
 Preview the destinations that would be backed up and the selected profile or
 configs without modifying the filesystem or updating submodules:
 
