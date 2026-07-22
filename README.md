@@ -5,6 +5,23 @@ Adisakshya's dotfiles!
     - For Windows - [Using winget](https://winget.run/pkg/GnuWin32/Make)
     - For Linux - ```$ apt-get install build-essential```
 
+## Prerequisites
+
+### Windows
+
+- **Git for Windows** (includes Git Bash) — required to run the install scripts. Download from <https://git-scm.com/downloads>.
+- **GNU Make** — install via `winget install GnuWin32.Make`.
+- **Developer Mode enabled *or* an elevated (Administrator) shell** — required for symlink creation. Enable Developer Mode under *Settings → Privacy & security → For developers*, or open a terminal as Administrator.
+- **PowerShell execution policy** — local scripts must be allowed to run:
+  ```powershell
+  Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+  ```
+
+### Linux
+
+- **`git`, `curl` or `wget`, `zsh`** — install via your distro's package manager, e.g. `sudo apt-get install git curl zsh`.
+- **`sudo` access** — required for package installation and writing to `/usr/local/bin`.
+
 ## Installation
 
 ### Download dotfiles repository
@@ -73,6 +90,19 @@ configs without modifying the filesystem or updating submodules:
 `--check` is accepted as an alias for `--dry-run`. Restore a backup by copying the
 desired file from its timestamped directory back to the corresponding path in
 your home directory after removing the generated symlink.
+
+### Re-running / Idempotency
+
+Dotbot skips symlinks that already exist and already point to the correct target, so re-running `./install-profile <profile>` is safe. Only destinations that are missing or point elsewhere are updated (after the usual backup step described above).
+
+### Removing managed symlinks
+
+To remove broken or unwanted symlinks created by Dotbot, either:
+
+- Run `./install-profile <profile>` with a Dotbot config that includes a `clean` directive — Dotbot will remove links whose targets no longer exist.
+- Or manually delete the symlinks listed in the YAML files under `meta/configs/`.
+
+After removing symlinks, restore the original files from the `~/.dotfiles-backups/` directory created during installation.
 
 ## Contents
 
