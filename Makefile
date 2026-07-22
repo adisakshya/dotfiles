@@ -9,11 +9,19 @@ ZSH_SYNTAX_HIGHLIGHTING_COMMIT := 1d85c692615a25fe2293bdd44b34c217d5d2bf04
 ZSH_AUTOSUGGESTIONS_COMMIT := 85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
 
 # PHONY
-.PHONY: windows linux
+.PHONY: windows linux win lin
 
 help :
-	@echo "win \t: Bootstrap and install dotfiles for Windows"
-	@echo "lin\t: Bootstrap and install dotfiles for Linux"
+	@echo "windows : Bootstrap and install dotfiles for Windows"
+	@echo "linux   : Bootstrap and install dotfiles for Linux"
+
+win:
+	@echo "Did you mean 'make windows'? Running it now..."
+	$(MAKE) windows
+
+lin:
+	@echo "Did you mean 'make linux'? Running it now..."
+	$(MAKE) linux
 
 bootstrap-windows:
 	@echo "-> Installing Powerline font Source Code Pro - https://github.com/powerline/fonts"
