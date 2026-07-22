@@ -96,3 +96,24 @@ meta
     ├── <a href="./meta/configs/windows-terminal.yaml" title="windows-terminal.yaml">windows-terminal.yaml</a>
     └── <a href="./meta/configs/zsh.yaml" title="zsh.yaml">zsh.yaml</a>
 </pre>
+
+## Updating pinned installation artifacts
+
+Remote executables and installer inputs are pinned in `Makefile`,
+`remote/Makefile`, and `scripts/install-windows-tools.ps1`. To upgrade one:
+
+1. Change the explicit version or Git commit to the intended upstream release.
+2. Download the artifact from that versioned URL and calculate its SHA-256 digest
+   (`sha256sum <file>` on Linux or `Get-FileHash -Algorithm SHA256 <file>` on
+   Windows). Never take a digest from the same untrusted download location as the
+   artifact without also validating the publisher's signature.
+3. Replace the corresponding checksum, run the checks below, and review the URL
+   scan to ensure no mutable `latest`, `master` raw-download, or piped-shell URL
+   was introduced.
+4. For Git dependencies, update the full commit SHA. Dotbot remains recorded by
+   the repository's submodule gitlink; installers intentionally do not pass
+   `--remote`, so a checkout always installs that recorded revision.
+
+The verified-download helpers write to a temporary file and move it into place
+only after its digest matches. A checksum failure stops installation and removes
+that temporary file.
