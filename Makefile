@@ -28,6 +28,7 @@ lin:
 	$(MAKE) linux
 
 bootstrap-windows:
+	powershell -ExecutionPolicy Bypass -File scripts/check-windows-prereqs.ps1
 	@echo "-> Installing Powerline font Source Code Pro - https://github.com/powerline/fonts"
 	powershell common/fonts/prerequisite.ps1
 	powershell common/fonts/install.ps1
