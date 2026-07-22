@@ -39,22 +39,25 @@ install-ngrok:
 	sudo apt-get update && sudo apt-get install -y ngrok
 
 code:
-	@command -v code-server >/dev/null 2>&1 && echo "code-server already installed, skipping." && exit 0; \
+	@command -v code-server >/dev/null 2>&1 && echo "code-server already installed, skipping." || { \
 	echo "-> Installing Code Server $(CODE_SERVER_VERSION)"; \
-	curl -fsSL https://code-server.dev/install.sh -o /tmp/install-code-server.sh && \
-	sh /tmp/install-code-server.sh --version $(CODE_SERVER_VERSION) && \
-	rm -f /tmp/install-code-server.sh && \
+	ARCH=$$(dpkg --print-architecture); \
+	curl -fsSL "https://github.com/coder/code-server/releases/download/v$(CODE_SERVER_VERSION)/code-server_$(CODE_SERVER_VERSION)_$${ARCH}.deb" -o /tmp/code-server.deb && \
+	curl -fsSL "https://github.com/coder/code-server/releases/download/v$(CODE_SERVER_VERSION)/code-server_$(CODE_SERVER_VERSION)_$${ARCH}.deb.sha256" | awk '{print $$1 "  /tmp/code-server.deb"}' | sha256sum --check && \
+	sudo dpkg -i /tmp/code-server.deb && \
+	rm -f /tmp/code-server.deb; }
+	@code-server --list-extensions 2>/dev/null | grep -q 'adisakshya.adisakshya-extension-pack' && echo "extension pack already installed, skipping." || { \
 	echo "-> Installing Extension Pack $(EXTENSION_PACK_VERSION)"; \
 	$(DOWNLOAD_VERIFIED) https://github.com/adisakshya/extension-pack/releases/download/v$(EXTENSION_PACK_VERSION)/adisakshya-extension-pack.vsix $(EXTENSION_PACK_SHA256) /tmp/adisakshya-extension-pack.vsix && \
 	code-server --install-extension /tmp/adisakshya-extension-pack.vsix && \
-	rm -f /tmp/adisakshya-extension-pack.vsix
+	rm -f /tmp/adisakshya-extension-pack.vsix; }
 
 jekyll:
 	@command -v jekyll >/dev/null 2>&1 && echo "jekyll already installed, skipping." && exit 0; \
-	echo "-> Installing Ruby"; \
-	sudo apt update; \
-	sudo apt-get install ruby-full patch zlib1g-dev build-essential -y; \
-	echo "-> Installing Jekyll and Bundler"; \
+	echo "-> Installing Ruby" && \
+	sudo apt update && \
+	sudo apt-get install ruby-full patch zlib1g-dev build-essential -y && \
+	echo "-> Installing Jekyll and Bundler" && \
 	gem install jekyll bundler
 
 # Docker packages are authenticated by apt using the checksum-verified signing key.
@@ -66,9 +69,7 @@ docker:
 	rm -f /tmp/docker.gpg && \
 	echo "deb [arch=$$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
 	sudo apt-get update && \
-	sudo apt-get install docker-ce docker-ce-cli containerd.io
-	@docker compose version >/dev/null 2>&1 && echo "Docker Compose v2 already available via 'docker compose', skipping." || \
-	echo "Docker Compose v2 is bundled with Docker Engine. Ensure Docker is installed and up to date."
+	sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 neo4j:
 	@echo "-> Installing Neo4j"
