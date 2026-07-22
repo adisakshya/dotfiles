@@ -54,7 +54,7 @@
             },
             "opacity": 30,
             "padding": "20, 10, 8, 10",
-            "startingDirectory": "D:\\projects",
+            "startingDirectory": "%USERPROFILE%\\projects",
             "unfocusedAppearance": 
             {
                 "colorScheme": "Solid Palette"
@@ -106,10 +106,10 @@
             },
             {
                 "colorScheme": "Recording Palette",
-                "commandline": "C:/Program Files/Git/bin/bash.exe -i -l",
+                "commandline": "%PROGRAMFILES%\\Git\\bin\\bash.exe -i -l",
                 "guid": "{47cb2d64-6d01-4cab-a00f-436a9a7cfb08}",
                 "hidden": false,
-                "icon": "C:/Program Files/Git/mingw64/share/git/git-for-windows.ico",
+                "icon": "%PROGRAMFILES%\\Git\\mingw64\\share\\git\\git-for-windows.ico",
                 "name": "Recording Dark",
                 "opacity": 100,
                 "tabTitle": "Adisakshya's Business Card",
