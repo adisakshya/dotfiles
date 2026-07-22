@@ -73,6 +73,7 @@ case "${1:-}" in
             exit 2
         fi
         for config in "$@"; do
+            config="${config%-sudo}"
             config_files+=("${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${config}${CONFIG_SUFFIX}")
         done
         ;;
