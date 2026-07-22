@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Install zsh using the system package manager.
 # Supports apt-get (Debian/Ubuntu), dnf (Fedora/RHEL), pacman (Arch), and apk (Alpine).
 
-set -euo pipefail
+set -eu
 
 if command -v apt-get >/dev/null 2>&1; then
     sudo apt-get update
@@ -10,7 +10,7 @@ if command -v apt-get >/dev/null 2>&1; then
 elif command -v dnf >/dev/null 2>&1; then
     sudo dnf install -y zsh
 elif command -v pacman >/dev/null 2>&1; then
-    sudo pacman -Sy --noconfirm zsh
+    sudo pacman -Syu --noconfirm zsh
 elif command -v apk >/dev/null 2>&1; then
     sudo apk add --no-cache zsh
 else
