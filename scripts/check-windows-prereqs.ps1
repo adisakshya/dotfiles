@@ -12,13 +12,21 @@ if (Get-Command git -ErrorAction SilentlyContinue) {
     $errors += "Git is not installed. Download it from https://git-scm.com/download/win"
 }
 
-# --- Bash (Git Bash or WSL) ---
-$hasBash = (Get-Command bash -ErrorAction SilentlyContinue) -or (Get-Command wsl -ErrorAction SilentlyContinue)
-if ($hasBash) {
-    Write-Host "[OK] Bash is available (Git Bash or WSL)." -ForegroundColor Green
+# --- Bash (Git Bash required; WSL alone is not sufficient) ---
+if (Get-Command bash -ErrorAction SilentlyContinue) {
+    Write-Host "[OK] Bash is available on PATH." -ForegroundColor Green
 } else {
-    Write-Host "[FAIL] Bash is not available." -ForegroundColor Red
-    $errors += "Bash is not available. Install Git for Windows (includes Git Bash) from https://git-scm.com/download/win, or enable WSL (https://learn.microsoft.com/en-us/windows/wsl/install)."
+    Write-Host "[FAIL] Bash is not available on PATH." -ForegroundColor Red
+    $errors += "bash is not available on PATH. Install Git for Windows (https://git-scm.com/download/win) which includes Git Bash."
+}
+
+# --- PowerShell execution policy ---
+$effectivePolicy = Get-ExecutionPolicy
+if ($effectivePolicy -in @('Restricted', 'AllSigned')) {
+    Write-Host "[FAIL] PowerShell execution policy '$effectivePolicy' will block install scripts." -ForegroundColor Red
+    $errors += "PowerShell execution policy '$effectivePolicy' will block install scripts. Run: Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned"
+} else {
+    Write-Host "[OK] PowerShell execution policy is '$effectivePolicy' (scripts can run)." -ForegroundColor Green
 }
 
 # --- Make ---
