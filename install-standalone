@@ -11,6 +11,7 @@ CONFIG_SUFFIX=".yaml"
 
 META_DIR="meta"
 CONFIG_DIR="configs"
+
 DOTBOT_DIR="dotbot"
 DOTBOT_BIN="bin/dotbot"
 
