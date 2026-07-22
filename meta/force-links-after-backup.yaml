@@ -1,3 +1,7 @@
+# This fragment is appended by install-profile and install-standalone *after*
+# scripts/backup-dotfiles has saved a timestamped copy of every pre-existing
+# file at a managed destination.  Do not use it in isolation — always run the
+# backup step first so that force-relinking cannot cause data loss.
 - defaults:
     link:
       force: true

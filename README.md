@@ -91,6 +91,23 @@ configs without modifying the filesystem or updating submodules:
 desired file from its timestamped directory back to the corresponding path in
 your home directory after removing the generated symlink.
 
+To run the backup step in isolation — without touching submodules or creating
+any symlinks — use the helper script at the repository root:
+
+```bash
+# Preview what would be backed up for the linux profile
+./backup-existing.sh --dry-run --profile linux
+
+# Back up without installing
+./backup-existing.sh --profile linux
+
+# Back up specific configs only
+./backup-existing.sh --configs bash zsh essentials
+```
+
+This is useful when you want to inspect or preserve existing dotfiles before
+committing to a full install.
+
 ### Re-running / Idempotency
 
 Dotbot skips symlinks that already exist and already point to the correct target, so re-running `./install-profile <profile>` is safe. Only destinations that are missing or point elsewhere are updated (after the usual backup step described above).
