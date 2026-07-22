@@ -1,0 +1,71 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+      - name: Run ShellCheck
+        run: |
+          shellcheck install-profile install-standalone
+          find scripts/ -name "*.sh" -exec shellcheck {} +
+
+  dotbot-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install dotbot
+        run: pip install dotbot
+      - name: Validate Dotbot configs
+        run: |
+          for config in meta/configs/*.yaml; do
+            echo "Validating $config..."
+            python -c "import yaml; yaml.safe_load(open('$config'))"
+          done
+          python -c "import yaml; yaml.safe_load(open('meta/base.yaml'))"
+
+  makefile-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Makefile syntax
+        run: make --dry-run help
+
+  powershell-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PowerShell
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y powershell
+      - name: Check PowerShell syntax
+        run: |
+          pwsh -Command "
+            \$errors = \$null
+            \$null = [System.Management.Automation.Language.Parser]::ParseFile(
+              'windows/powershell/profile.ps1', [ref]\$null, [ref]\$errors)
+            if (\$errors.Count -gt 0) {
+              \$errors | ForEach-Object { Write-Error \$_.Message }
+              exit 1
+            }
+            Write-Host 'Syntax OK'
+          "
