@@ -49,6 +49,31 @@ $ ./install-standalone <configs...>
 ```
 See [meta/configs/](./meta/configs) for available configurations
 
+### Existing files and dry runs
+
+Installation replaces configured destinations with symlinks. Before relinking, any
+existing file, directory, or symlink at a configured destination is copied to
+`~/.dotfiles-backups/<UTC timestamp>-<process ID>/`, preserving its path
+relative to your home directory. Installation stops if a backup cannot be
+created. Forced replacement is enabled only by the installers, after this
+backup succeeds.
+
+For standalone configs ending in `-sudo`, the installer explicitly preserves
+the caller's `HOME` for Dotbot so privileged linking targets the same paths that
+were backed up.
+
+Preview the destinations that would be backed up and the selected profile or
+configs without modifying the filesystem or updating submodules:
+
+```bash
+./install-profile --dry-run linux
+./install-standalone --dry-run bash zsh
+```
+
+`--check` is accepted as an alias for `--dry-run`. Restore a backup by copying the
+desired file from its timestamped directory back to the corresponding path in
+your home directory after removing the generated symlink.
+
 ## Contents
 
 ### Profiles

@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 BASE_CONFIG="base"
+FORCE_CONFIG="force-links-after-backup"
 CONFIG_SUFFIX=".yaml"
 
 META_DIR="meta"
@@ -12,15 +15,45 @@ DOTBOT_BIN="bin/dotbot"
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+dry_run=false
+if [[ ${1:-} == "--dry-run" || ${1:-} == "--check" ]]; then
+    dry_run=true
+    shift
+fi
+
+if (( $# == 0 )); then
+    echo "Usage: $0 [--dry-run|--check] <profile>" >&2
+    exit 2
+fi
+
+profile_file="${BASE_DIR}/${META_DIR}/${PROFILES_DIR}/$1"
+[[ -f $profile_file ]] || { echo "Unknown profile: $1" >&2; exit 1; }
+
+mapfile -t lines < "$profile_file"
+config_files=()
+for config in "${lines[@]}"; do
+    profileConfigName=${config//$'\t\r\n'/}
+    [[ -n $profileConfigName ]] || continue
+    config_files+=("${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${profileConfigName}${CONFIG_SUFFIX}")
+done
+
+if $dry_run; then
+    "${BASE_DIR}/scripts/backup-dotfiles" --dry-run "${config_files[@]}"
+    printf 'Would install profile %s with configs: %s\n' "$1" "${lines[*]}"
+    exit 0
+fi
+
 git submodule update --init --recursive --remote
 
-IFS=$'\n' read -d '' -r -a lines < "${BASE_DIR}/${META_DIR}/${PROFILES_DIR}/$1"
-for config in ${lines[@]}; do
+"${BASE_DIR}/scripts/backup-dotfiles" "${config_files[@]}"
+
+for config in "${lines[@]}"; do
     echo -e "\nConfigure $config"
     configFile="$(mktemp)"
-    profileConfigName=${config//[$'\t\r\n']} && CLEANED=${CLEANED%%*( )}
-    cat "${BASE_DIR}/${META_DIR}/${BASE_CONFIG}${CONFIG_SUFFIX}" >> $configFile
-    cat "${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${profileConfigName}${CONFIG_SUFFIX}" >> $configFile
+    profileConfigName=${config//$'\t\r\n'/}
+    cat "${BASE_DIR}/${META_DIR}/${BASE_CONFIG}${CONFIG_SUFFIX}" >> "$configFile"
+    cat "${BASE_DIR}/${META_DIR}/${FORCE_CONFIG}${CONFIG_SUFFIX}" >> "$configFile"
+    cat "${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${profileConfigName}${CONFIG_SUFFIX}" >> "$configFile"
     cmd=("${BASE_DIR}/${META_DIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASE_DIR}" -c "$configFile")
     "${cmd[@]}"
     rm -f "$configFile"
