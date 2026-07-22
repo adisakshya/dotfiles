@@ -19,7 +19,7 @@ Adisakshya's dotfiles!
 
 ### Linux
 
-- **`git`, `curl` or `wget`, `zsh`** — install via your distro's package manager, e.g. `sudo apt-get install git curl zsh`.
+- **`git`, `curl`, `zsh`** — install via your distro's package manager, e.g. `sudo apt-get install git curl zsh`.
 - **`sudo` access** — required for package installation and writing to `/usr/local/bin`.
 
 ## Installation
@@ -97,10 +97,7 @@ Dotbot skips symlinks that already exist and already point to the correct target
 
 ### Removing managed symlinks
 
-To remove broken or unwanted symlinks created by Dotbot, either:
-
-- Run `./install-profile <profile>` with a Dotbot config that includes a `clean` directive — Dotbot will remove links whose targets no longer exist.
-- Or manually delete the symlinks listed in the YAML files under `meta/configs/`.
+To remove managed symlinks, manually delete the symlinks listed in the YAML files under `meta/configs/`.
 
 After removing symlinks, restore the original files from the `~/.dotfiles-backups/` directory created during installation.
 
