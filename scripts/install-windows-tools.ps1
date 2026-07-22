@@ -15,6 +15,18 @@ try {
 
     New-Item -ItemType Directory -Force -Path $InstallDirectory | Out-Null
     Move-Item -Force $TemporaryFile (Join-Path $InstallDirectory 'oh-my-posh.exe')
+
+    $UserPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $UserPathEntries = @($UserPath -split ';' | Where-Object { $_ })
+    if (-not ($UserPathEntries | Where-Object { $_.Equals($InstallDirectory, [StringComparison]::OrdinalIgnoreCase) })) {
+        $UpdatedUserPath = ($UserPathEntries + $InstallDirectory) -join ';'
+        [Environment]::SetEnvironmentVariable('Path', $UpdatedUserPath, 'User')
+    }
+
+    $ProcessPathEntries = @($env:Path -split ';' | Where-Object { $_ })
+    if (-not ($ProcessPathEntries | Where-Object { $_.Equals($InstallDirectory, [StringComparison]::OrdinalIgnoreCase) })) {
+        $env:Path = ($ProcessPathEntries + $InstallDirectory) -join ';'
+    }
 } finally {
     Remove-Item -Force -ErrorAction SilentlyContinue $TemporaryFile
 }
