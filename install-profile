@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+configFile=
+trap 'rm -f "${configFile:-}"' EXIT
+
 BASE_CONFIG="base"
 FORCE_CONFIG="force-links-after-backup"
 CONFIG_SUFFIX=".yaml"
@@ -57,6 +60,7 @@ for config in "${lines[@]}"; do
     cmd=("${BASE_DIR}/${META_DIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASE_DIR}" -c "$configFile")
     "${cmd[@]}"
     rm -f "$configFile"
+    configFile=
 done
 
 cd "${BASE_DIR}"
