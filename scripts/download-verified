@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if (( $# != 3 )); then
+    echo "Usage: $0 <url> <sha256> <destination>" >&2
+    exit 2
+fi
+
+url=$1
+expected_sha256=$2
+destination=$3
+temporary="${destination}.download-$$"
+trap 'rm -f "$temporary"' EXIT
+
+curl --fail --location --silent --show-error "$url" --output "$temporary"
+printf '%s  %s\n' "$expected_sha256" "$temporary" | sha256sum --check --status
+mv "$temporary" "$destination"

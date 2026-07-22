@@ -40,7 +40,7 @@ if $dry_run; then
 fi
 
 cd "${BASE_DIR}"
-git submodule update --init --recursive --remote
+git submodule update --init --recursive
 
 "${BASE_DIR}/scripts/backup-dotfiles" "${config_files[@]}"
 
