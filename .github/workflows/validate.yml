@@ -19,8 +19,7 @@ jobs:
         run: sudo apt-get install -y shellcheck
       - name: Run ShellCheck
         run: |
-          shellcheck install-profile install-standalone
-          find scripts/ -name "*.sh" -exec shellcheck {} +
+          grep -rlE '^#!.*(bash|/sh)' . | grep -v '\.git' | sort | xargs shellcheck --severity=warning
 
   dotbot-syntax:
     runs-on: ubuntu-latest
@@ -41,6 +40,7 @@ jobs:
             python -c "import yaml; yaml.safe_load(open('$config'))"
           done
           python -c "import yaml; yaml.safe_load(open('meta/base.yaml'))"
+          python -c "import yaml; yaml.safe_load(open('meta/force-links-after-backup.yaml'))"
 
   makefile-syntax:
     runs-on: ubuntu-latest
