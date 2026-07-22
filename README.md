@@ -19,8 +19,10 @@ Adisakshya's dotfiles!
 
 ### Linux
 
-- **`git`, `curl`, `zsh`** — install via your distro's package manager, e.g. `sudo apt-get install git curl zsh`.
+- **`git` and `curl`** — install via your distro's package manager before running `make linux`.
 - **`sudo` access** — required for package installation and writing to `/usr/local/bin`.
+- **Supported distributions** — Ubuntu/Debian (`apt-get`), Fedora/RHEL (`dnf`), Arch Linux (`pacman`), and Alpine (`apk`). The bootstrap installs `zsh` automatically using the detected package manager.
+- **Supported CPU architectures** — x86\_64 (amd64), aarch64/arm64, and armv7l/armv6l (arm).
 
 ## Installation
 
@@ -36,7 +38,7 @@ The Makefile contains bootstrap scripts that install the following dependencies.
 - Source Code Pro Powerline Font (all platforms)
 - Oh My Posh (all platforms, pinned to an explicit version with SHA-256 verification)
 - Oh My ZSH and required ZSH plugins (Linux only, pinned to specific Git commit SHAs)
-- ZSH (Linux only, installed via apt-get without a version pin)
+- ZSH (Linux only, installed via the detected system package manager without a version pin)
 
 After installing these prerequisites the symlinks are created for the chosen profile using dotbot install-script.
 
