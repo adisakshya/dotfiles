@@ -11,11 +11,19 @@ Adisakshya's dotfiles!
 
 - **Git for Windows** (includes Git Bash) — required to run the install scripts. Download from <https://git-scm.com/downloads>.
 - **GNU Make** — install via `winget install GnuWin32.Make`.
-- **Developer Mode enabled *or* an elevated (Administrator) shell** — required for symlink creation. Enable Developer Mode under *Settings → Privacy & security → For developers*, or open a terminal as Administrator.
+- **Developer Mode enabled *or* an elevated (Administrator) shell** — required for symlink creation. Enable Developer Mode under *Settings → Privacy & security → For developers*, or open a terminal as Administrator. Without one of these, Dotbot will fail to create symlinks mid-install.
 - **PowerShell execution policy** — local scripts must be allowed to run:
   ```powershell
   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
   ```
+
+You can verify all prerequisites are in place before running `make windows` by running the bundled check script in PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/check-windows-prereqs.ps1
+```
+
+`make windows` calls this script automatically and will stop with a descriptive error if any prerequisite is missing.
 
 ### Linux
 
