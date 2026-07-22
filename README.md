@@ -32,10 +32,11 @@ git clone https://github.com/adisakshya/dotfiles ~/.dotfiles && cd ~/.dotfiles
 
 Dotfiles can be installed either using the [Makefile](./Makefile) or the dotbot install-scripts.
 
-The Makefile contains bootstrap scripts that install the following pinned and checksum-verified dependencies:
+The Makefile contains bootstrap scripts that install the following dependencies. Oh My Posh, Oh My ZSH, and ZSH plugins are pinned and checksum-verified; ZSH itself is installed via the system package manager without a version pin.
 - Source Code Pro Powerline Font (all platforms)
 - Oh My Posh (all platforms, pinned to an explicit version with SHA-256 verification)
-- ZSH, Oh My ZSH, and required ZSH plugins (Linux only, pinned to specific Git commits)
+- Oh My ZSH and required ZSH plugins (Linux only, pinned to specific Git commit SHAs)
+- ZSH (Linux only, installed via apt-get without a version pin)
 
 After installing these prerequisites the symlinks are created for the chosen profile using dotbot install-script.
 
