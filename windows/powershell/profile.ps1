@@ -1,6 +1,5 @@
 # Import modules
 Import-Module posh-git
-Import-Module oh-my-posh
 Import-Module PSReadLine
 
 # Autocomplete
@@ -13,4 +12,6 @@ Set-PSReadLineOption -ShowToolTips
 Set-PSReadLineOption -HistoryNoDuplicates
 
 # Set Oh My Posh prompt
-Set-PoshPrompt -Theme ~/adisakshya.yaml
+if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    oh-my-posh init pwsh --config "$HOME\adisakshya.yaml" | Invoke-Expression
+}
