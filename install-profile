@@ -54,11 +54,9 @@ for config in "${lines[@]}"; do
     echo -e "\nConfigure $config"
     configFile="$(mktemp)"
     profileConfigName=${config//$'\t\r\n'/}
-    {
-        cat "${BASE_DIR}/${META_DIR}/${BASE_CONFIG}${CONFIG_SUFFIX}"
-        cat "${BASE_DIR}/${META_DIR}/${FORCE_CONFIG}${CONFIG_SUFFIX}"
-        cat "${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${profileConfigName}${CONFIG_SUFFIX}"
-    } >> "$configFile"
+    cat "${BASE_DIR}/${META_DIR}/${BASE_CONFIG}${CONFIG_SUFFIX}" >> "$configFile"
+    cat "${BASE_DIR}/${META_DIR}/${FORCE_CONFIG}${CONFIG_SUFFIX}" >> "$configFile"
+    cat "${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${profileConfigName}${CONFIG_SUFFIX}" >> "$configFile"
     cmd=("${BASE_DIR}/${META_DIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASE_DIR}" -c "$configFile")
     "${cmd[@]}"
     rm -f "$configFile"
