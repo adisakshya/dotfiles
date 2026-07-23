@@ -69,3 +69,17 @@ jobs:
             }
             Write-Host 'Syntax OK'
           "
+
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # No submodules or dotbot installation needed: the dry-run and --check
+      # flags in backup-dotfiles.sh exit before invoking dotbot, and the sudo
+      # integration test creates its own fake dotbot binary inline.
+      - name: Run tests
+        run: |
+          for test in tests/*.sh; do
+            echo "Running $test..."
+            bash "$test"
+          done
