@@ -1,0 +1,85 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+      - name: Run ShellCheck
+        run: |
+          grep -rlE '^#!.*(bash|/sh)' . | grep -v '\.git' | sort | xargs shellcheck --severity=warning
+
+  dotbot-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install dotbot
+        run: pip install dotbot
+      - name: Validate Dotbot configs
+        run: |
+          for config in meta/configs/*.yaml; do
+            echo "Validating $config..."
+            python -c "import yaml; yaml.safe_load(open('$config'))"
+          done
+          python -c "import yaml; yaml.safe_load(open('meta/base.yaml'))"
+          python -c "import yaml; yaml.safe_load(open('meta/force-links-after-backup.yaml'))"
+
+  makefile-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Makefile syntax
+        run: make --dry-run help
+
+  powershell-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PowerShell
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y powershell
+      - name: Check PowerShell syntax
+        run: |
+          pwsh -Command "
+            \$errors = \$null
+            \$null = [System.Management.Automation.Language.Parser]::ParseFile(
+              'windows/powershell/profile.ps1', [ref]\$null, [ref]\$errors)
+            if (\$errors.Count -gt 0) {
+              \$errors | ForEach-Object { Write-Error \$_.Message }
+              exit 1
+            }
+            Write-Host 'Syntax OK'
+          "
+
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # No submodules or dotbot installation needed: the dry-run and --check
+      # flags in backup-dotfiles.sh exit before invoking dotbot, and the sudo
+      # integration test creates its own fake dotbot binary inline.
+      - name: Run tests
+        run: |
+          for test in tests/*.sh; do
+            echo "Running $test..."
+            bash "$test"
+          done
