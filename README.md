@@ -17,6 +17,14 @@ Adisakshya's dotfiles!
   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
   ```
 
+**Windows Terminal settings** — installing this dotfile symlinks `settings.json` directly into Windows Terminal's `LocalState` directory, **replacing your existing settings file**. Back up your current settings before running `make windows`:
+
+```
+%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json
+```
+
+(For Windows Terminal Preview, substitute `Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe`.) The installer will create a timestamped backup automatically (see [Existing files and dry runs](#existing-files-and-dry-runs)), but you may also want to copy the file somewhere safe manually first.
+
 You can verify all prerequisites are in place before running `make windows` by running the bundled check script in PowerShell:
 
 ```powershell
