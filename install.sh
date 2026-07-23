@@ -31,7 +31,7 @@ fi
 # creates the symlinks defined in meta/profiles/codespaces.
 # ------------------------------------------------------------------
 echo "==> Running Dotbot with the 'codespaces' profile..."
-"$DOTFILES_DIR/install-profile" codespaces
+(cd "$DOTFILES_DIR" && ./install-profile codespaces)
 
 echo "==> Dotfiles setup complete."
 if [[ "${CODESPACES:-}" == "true" ]]; then
