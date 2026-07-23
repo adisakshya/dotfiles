@@ -136,11 +136,55 @@ To remove managed symlinks, manually delete the symlinks listed in the YAML file
 
 After removing symlinks, restore the original files from the `~/.dotfiles-backups/` directory created during installation.
 
+## GitHub Codespaces
+
+GitHub Codespaces supports automatic dotfiles personalisation: when you create a new Codespace, GitHub clones your dotfiles repository and runs the first recognised entrypoint it finds (`install.sh`, `bootstrap.sh`, `setup.sh`, or `script/setup`).
+
+### Enabling dotfiles in Codespaces
+
+1. Open your [Codespaces settings](https://github.com/settings/codespaces).
+2. Under **Dotfiles**, enable *Automatically install dotfiles*.
+3. Select this repository (`adisakshya/dotfiles`).
+
+Every new Codespace you create will then clone the repository into `~/.dotfiles` and run `install.sh` automatically. See the [GitHub documentation](https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles) for full details.
+
+### What gets installed in a Codespace
+
+The `install.sh` entrypoint runs Dotbot with the `codespaces` profile (`meta/profiles/codespaces`), which creates symlinks for the following configs:
+
+| Config | What it provides |
+|---|---|
+| `bash` | `~/.bashrc` and `~/.bash_profile` |
+| `essentials` | `~/.aliases` and `~/.exports` |
+| `oh-my-posh` | `~/adisakshya.yaml` (prompt theme) |
+| `vscode` | VS Code / Code Server `settings.json` |
+| `zsh` | `~/.zshrc` |
+
+Windows-only configs (`powershell`, `windows-terminal`) and font files are intentionally excluded — they have no effect in a Linux container.
+
+> **Note:** `install.sh` creates the config symlinks but does not install `oh-my-posh` or `oh-my-zsh`. If you want the full prompt experience inside a Codespace, add a [devcontainer feature](https://containers.dev/features) or a `postCreateCommand` in your project's `devcontainer.json` to install those tools, or run `make linux` from the dotfiles directory after the Codespace starts.
+
+### Rebuilding after updating dotfiles
+
+Changes you push to this repository are picked up the next time a Codespace is created. To apply them to an existing Codespace without creating a new one:
+
+```bash
+cd ~/.dotfiles && git pull && ./install.sh
+```
+
+Or use **Codespaces → Rebuild container** from the VS Code command palette to get a completely fresh environment.
+
+### Known limitations
+
+- **Fonts** — Powerline / Source Code Pro fonts cannot be installed inside the container. In the browser-based editor, any configured Nerd Font will fall back to the browser's default monospace font. When connecting via a local VS Code client, configure the font in your *local* VS Code settings instead.
+- **oh-my-posh / oh-my-zsh** — `install.sh` creates the config symlinks but does not install these tools. Without them the `~/.zshrc` prompt line will produce an error on first launch; bash is unaffected.
+
 ## Contents
 
 ### Profiles
 <pre>
 meta/profiles
+├── <a href="./meta/profiles/codespaces" title="codespaces">codespaces</a>
 ├── <a href="./meta/profiles/linux" title="linux">linux</a>
 └── <a href="./meta/profiles/windows" title="windows">windows</a>
 </pre>
