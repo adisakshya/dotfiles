@@ -19,8 +19,8 @@ jobs:
       - name: Create VS Code config directory
         run: mkdir -p "$HOME/.config/Code/User"
 
-      - name: Install dotfiles (codespaces profile)
-        run: ./install-profile codespaces
+      - name: Install dotfiles (linux profile)
+        run: ./install-profile linux
 
       - name: Verify symlinks
         run: |
