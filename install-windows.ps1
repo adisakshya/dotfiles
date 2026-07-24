@@ -49,7 +49,7 @@ if ($psMajor -lt 5 -or ($psMajor -eq 5 -and $psMinor -lt 1)) {
 # Step 1: Validate prerequisites (skip symlink check — we copy, not link)
 # ---------------------------------------------------------------------------
 Write-Host ""
-Write-Host "Step 1/3: Checking prerequisites..." -ForegroundColor Cyan
+Write-Host "Step 1/4: Checking prerequisites..." -ForegroundColor Cyan
 
 $PrereqScript = Join-Path $PSScriptRoot "scripts\check-windows-prereqs.ps1"
 if (-not (Test-Path -LiteralPath $PrereqScript)) {
@@ -59,14 +59,15 @@ if (-not (Test-Path -LiteralPath $PrereqScript)) {
 }
 
 try {
-    & $PrereqScript -SkipSymlinkCheck
+    & $PrereqScript -SkipSymlinkCheck -SkipMakeCheck
 } catch {
     Write-Host ""
     Write-Host "[ERROR] Prerequisite check failed. Resolve the issues above, then re-run this script." -ForegroundColor Red
     exit 1
 }
+$prereqExitCode = $LASTEXITCODE
 
-if ($LASTEXITCODE -ne 0) {
+if ($prereqExitCode -ne 0) {
     Write-Host ""
     Write-Host "[ERROR] Prerequisite check failed. Resolve the issues above, then re-run this script." -ForegroundColor Red
     exit 1
@@ -76,7 +77,7 @@ if ($LASTEXITCODE -ne 0) {
 # Step 2: Install fonts (optional — skipped if script is absent)
 # ---------------------------------------------------------------------------
 Write-Host ""
-Write-Host "Step 2/3: Installing fonts..." -ForegroundColor Cyan
+Write-Host "Step 2/4: Installing fonts..." -ForegroundColor Cyan
 
 $FontScript = Join-Path $PSScriptRoot "common\fonts\install.ps1"
 if (Test-Path -LiteralPath $FontScript) {
@@ -88,10 +89,33 @@ if (Test-Path -LiteralPath $FontScript) {
 }
 
 # ---------------------------------------------------------------------------
-# Step 3: Copy dotfiles
+# Step 3: Install oh-my-posh
 # ---------------------------------------------------------------------------
 Write-Host ""
-Write-Host "Step 3/3: Copying dotfiles..." -ForegroundColor Cyan
+Write-Host "Step 3/4: Installing oh-my-posh..." -ForegroundColor Cyan
+
+$OhMyPoshScript = Join-Path $PSScriptRoot "scripts\install-windows-tools.ps1"
+if (Test-Path -LiteralPath $OhMyPoshScript) {
+    if ($PSCmdlet.ShouldProcess($OhMyPoshScript, "Run oh-my-posh installer")) {
+        & $OhMyPoshScript
+    }
+} else {
+    # Fallback: install via winget if the pinned script is absent
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        Write-Host "[INFO] install-windows-tools.ps1 not found; attempting winget install..." -ForegroundColor Cyan
+        if ($PSCmdlet.ShouldProcess("oh-my-posh", "winget install")) {
+            winget install JanDeDobbeleer.OhMyPosh -e --accept-source-agreements --accept-package-agreements -ErrorAction SilentlyContinue
+        }
+    } else {
+        Write-Host "[INFO] oh-my-posh installer not found and winget is unavailable — skipping." -ForegroundColor Cyan
+    }
+}
+
+# ---------------------------------------------------------------------------
+# Step 4: Copy dotfiles
+# ---------------------------------------------------------------------------
+Write-Host ""
+Write-Host "Step 4/4: Copying dotfiles..." -ForegroundColor Cyan
 
 $CopyScript = Join-Path $PSScriptRoot "scripts\install-windows-copy.ps1"
 if (-not (Test-Path -LiteralPath $CopyScript)) {
