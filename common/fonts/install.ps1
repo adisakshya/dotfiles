@@ -71,11 +71,8 @@ foreach ($fontFile in $fontFiles) {
 
         # Build the registry value name based on the font format.
         $extension = $fontFile.Extension.ToLower()
-        if ($extension -eq '.otf') {
-            $regValueName = "$displayName (OpenType)"
-        } else {
-            $regValueName = "$displayName (TrueType)"
-        }
+        $fontType = if ($extension -eq '.otf') { 'OpenType' } else { 'TrueType' }
+        $regValueName = "$($fontFile.BaseName) ($fontType)"
 
         # Register the font under HKCU so Windows recognises it immediately
         # without requiring a logout/login cycle.
@@ -83,6 +80,6 @@ foreach ($fontFile in $fontFiles) {
         if (-not (Test-Path $regKey)) {
             New-Item -Path $regKey -Force | Out-Null
         }
-        Set-ItemProperty -Path $regKey -Name $regValueName -Value $destPath -Type String
+        New-ItemProperty -Path $regKey -Name $regValueName -Value $destPath -PropertyType String -Force | Out-Null
     }
 }
