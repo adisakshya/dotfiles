@@ -7,9 +7,13 @@
 #                      when running the copy-based install (make windows-copy),
 #                      which does not create symlinks and therefore has no need
 #                      for Developer Mode or an elevated shell.
+#   -SkipMakeCheck     Omit the Make check. Pass this flag when running the
+#                      standalone installer (install-windows.ps1), which does
+#                      not require Make to be present.
 
 param(
-    [switch]$SkipSymlinkCheck
+    [switch]$SkipSymlinkCheck,
+    [switch]$SkipMakeCheck
 )
 
 $errors = @()
@@ -40,16 +44,27 @@ if ($effectivePolicy -in @('Restricted', 'AllSigned')) {
 }
 
 # --- Make ---
-if (Get-Command make -ErrorAction SilentlyContinue) {
-    Write-Host "[OK] Make is installed." -ForegroundColor Green
-} else {
-    Write-Host "[FAIL] Make is not installed." -ForegroundColor Red
-    $errors += "Make is not installed. Run: winget install GnuWin32.Make"
+if (-not $SkipMakeCheck) {
+    if (Get-Command make -ErrorAction SilentlyContinue) {
+        Write-Host "[OK] Make is installed." -ForegroundColor Green
+    } else {
+        Write-Host "[FAIL] Make is not installed." -ForegroundColor Red
+        $errors += "Make is not installed. Run: winget install GnuWin32.Make"
+    }
 }
 
+# --- Python (required by dotbot for the symlink-based install only) ---
 # --- Symlink capability (Developer Mode or elevation) ---
-# Skipped when -SkipSymlinkCheck is passed (e.g. for the copy-based install).
+# Both skipped when -SkipSymlinkCheck is passed (e.g. for the copy-based install).
 if (-not $SkipSymlinkCheck) {
+    $pythonFound = (Get-Command python -ErrorAction SilentlyContinue) -or (Get-Command python3 -ErrorAction SilentlyContinue)
+    if ($pythonFound) {
+        Write-Host "[OK] Python found." -ForegroundColor Green
+    } else {
+        Write-Host "[FAIL] Python not found — install from https://python.org or via winget: winget install Python.Python.3" -ForegroundColor Red
+        $errors += "Python is not installed. Install from https://python.org or run: winget install Python.Python.3"
+    }
+
     $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
     $devMode = $false
@@ -76,8 +91,9 @@ if ($errors.Count -gt 0) {
         Write-Host ""
         Write-Host "  * $msg" -ForegroundColor Yellow
     }
-    exit 1
+} else {
+    Write-Host ""
+    Write-Host "All prerequisites satisfied. Proceeding with installation." -ForegroundColor Green
 }
 
-Write-Host ""
-Write-Host "All prerequisites satisfied. Proceeding with installation." -ForegroundColor Green
+exit $errors.Count
