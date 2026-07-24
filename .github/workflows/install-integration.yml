@@ -1,0 +1,134 @@
+name: install-integration
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  install-linux:
+    name: Install profile — Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dotfiles (codespaces profile)
+        run: ./install-profile codespaces
+
+      - name: Verify symlinks
+        run: |
+          set -eu
+          repo="$GITHUB_WORKSPACE"
+          fail=0
+          check() {
+            local link="$1" target="$2"
+            if [ ! -L "$link" ]; then
+              echo "FAIL: $link is not a symlink"
+              fail=1
+              return
+            fi
+            actual=$(readlink -f "$link")
+            expected=$(readlink -f "$target")
+            if [ "$actual" != "$expected" ]; then
+              echo "FAIL: $link -> $actual (expected $expected)"
+              fail=1
+              return
+            fi
+            echo "OK:   $link"
+          }
+          check "$HOME/.bashrc"                         "$repo/common/bash/.bashrc"
+          check "$HOME/.bash_profile"                   "$repo/common/bash/.bash_profile"
+          check "$HOME/.aliases"                        "$repo/.aliases"
+          check "$HOME/.exports"                        "$repo/.exports"
+          check "$HOME/adisakshya.yaml"                 "$repo/common/oh-my-posh/adisakshya.yaml"
+          check "$HOME/.config/Code/User/settings.json" "$repo/common/vscode/settings.json"
+          check "$HOME/.zshrc"                          "$repo/linux/zsh/.zshrc"
+          exit $fail
+
+  install-codespaces:
+    name: Codespaces entrypoint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run install.sh
+        # install.sh auto-detects DOTFILES_DIR from BASH_SOURCE[0]; no env var needed.
+        run: bash install.sh
+
+      - name: Verify symlinks
+        run: |
+          set -eu
+          repo="$GITHUB_WORKSPACE"
+          fail=0
+          check() {
+            local link="$1" target="$2"
+            if [ ! -L "$link" ]; then
+              echo "FAIL: $link is not a symlink"
+              fail=1
+              return
+            fi
+            actual=$(readlink -f "$link")
+            expected=$(readlink -f "$target")
+            if [ "$actual" != "$expected" ]; then
+              echo "FAIL: $link -> $actual (expected $expected)"
+              fail=1
+              return
+            fi
+            echo "OK:   $link"
+          }
+          check "$HOME/.bashrc"                         "$repo/common/bash/.bashrc"
+          check "$HOME/.bash_profile"                   "$repo/common/bash/.bash_profile"
+          check "$HOME/.aliases"                        "$repo/.aliases"
+          check "$HOME/.exports"                        "$repo/.exports"
+          check "$HOME/adisakshya.yaml"                 "$repo/common/oh-my-posh/adisakshya.yaml"
+          check "$HOME/.config/Code/User/settings.json" "$repo/common/vscode/settings.json"
+          check "$HOME/.zshrc"                          "$repo/linux/zsh/.zshrc"
+          exit $fail
+
+  install-macos:
+    name: Install profile — macOS (manual)
+    runs-on: macos-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dotfiles (codespaces profile)
+        run: ./install-profile codespaces
+
+      - name: Verify symlinks
+        run: |
+          set -eu
+          repo="$GITHUB_WORKSPACE"
+          fail=0
+          check() {
+            local link="$1" target="$2"
+            if [ ! -L "$link" ]; then
+              echo "FAIL: $link is not a symlink"
+              fail=1
+              return
+            fi
+            # Use realpath instead of readlink -f: BSD readlink does not support -f.
+            actual=$(realpath "$link")
+            expected=$(realpath "$target")
+            if [ "$actual" != "$expected" ]; then
+              echo "FAIL: $link -> $actual (expected $expected)"
+              fail=1
+              return
+            fi
+            echo "OK:   $link"
+          }
+          check "$HOME/.bashrc"         "$repo/common/bash/.bashrc"
+          check "$HOME/.bash_profile"   "$repo/common/bash/.bash_profile"
+          check "$HOME/.aliases"        "$repo/.aliases"
+          check "$HOME/.exports"        "$repo/.exports"
+          check "$HOME/adisakshya.yaml" "$repo/common/oh-my-posh/adisakshya.yaml"
+          check "$HOME/.zshrc"          "$repo/linux/zsh/.zshrc"
+          exit $fail
