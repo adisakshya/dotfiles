@@ -13,9 +13,9 @@ grep -q "SetEnvironmentVariable('Path', \$UpdatedUserPath, 'User')" \
     "$ROOT/scripts/install-windows-tools.ps1"
 
 remote_makefile="$ROOT/remote/Makefile"
-grep -q 'architecture=$$(dpkg --print-architecture)' "$remote_makefile"
-grep -q 'CODE_SERVER_ARM64_SHA256' "$remote_makefile"
-grep -q 'architecture=$$(uname -m)' "$remote_makefile"
-grep -q 'DOCKER_COMPOSE_AARCH64_SHA256' "$remote_makefile"
+grep -q 'CODE_SERVER_VERSION' "$remote_makefile"
+grep -q 'code-server_$(CODE_SERVER_VERSION)' "$remote_makefile"
+grep -q 'sha256sum --check' "$remote_makefile"
+grep -q 'docker-compose-plugin' "$remote_makefile"
 
 echo "pinned installer checks passed"
