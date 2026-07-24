@@ -1,0 +1,3 @@
+- copy:
+    ~/.bashrc: common/bash/.bashrc
+    ~/.bash_profile: common/bash/.bash_profile
