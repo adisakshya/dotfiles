@@ -1,6 +1,16 @@
 # check-windows-prereqs.ps1
 # Validates all prerequisites required to run "make windows" on Windows.
 # Exits with code 1 and descriptive messages if any check fails.
+#
+# Parameters:
+#   -SkipSymlinkCheck  Omit the symlink/Developer-Mode check. Pass this flag
+#                      when running the copy-based install (make windows-copy),
+#                      which does not create symlinks and therefore has no need
+#                      for Developer Mode or an elevated shell.
+
+param(
+    [switch]$SkipSymlinkCheck
+)
 
 $errors = @()
 
@@ -38,21 +48,24 @@ if (Get-Command make -ErrorAction SilentlyContinue) {
 }
 
 # --- Symlink capability (Developer Mode or elevation) ---
-$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+# Skipped when -SkipSymlinkCheck is passed (e.g. for the copy-based install).
+if (-not $SkipSymlinkCheck) {
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-$devMode = $false
-try {
-    $regVal = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense
-    $devMode = ($regVal -eq 1)
-} catch {}
+    $devMode = $false
+    try {
+        $regVal = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense
+        $devMode = ($regVal -eq 1)
+    } catch {}
 
-if ($isAdmin) {
-    Write-Host "[OK] Running as Administrator (symlink creation allowed)." -ForegroundColor Green
-} elseif ($devMode) {
-    Write-Host "[OK] Developer Mode is enabled (symlink creation allowed)." -ForegroundColor Green
-} else {
-    Write-Host "[FAIL] Symlink creation is not available." -ForegroundColor Red
-    $errors += "Symlink creation requires either Developer Mode or an elevated (Administrator) shell.`n  - Enable Developer Mode: Settings > Privacy & security > For developers > Developer Mode`n  - Or re-run this terminal session as Administrator."
+    if ($isAdmin) {
+        Write-Host "[OK] Running as Administrator (symlink creation allowed)." -ForegroundColor Green
+    } elseif ($devMode) {
+        Write-Host "[OK] Developer Mode is enabled (symlink creation allowed)." -ForegroundColor Green
+    } else {
+        Write-Host "[FAIL] Symlink creation is not available." -ForegroundColor Red
+        $errors += "Symlink creation requires either Developer Mode or an elevated (Administrator) shell.`n  - Enable Developer Mode: Settings > Privacy & security > For developers > Developer Mode`n  - Or re-run this terminal session as Administrator."
+    }
 }
 
 # --- Summary ---
