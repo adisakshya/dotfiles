@@ -94,3 +94,47 @@ jobs:
           check "$HOME/.config/Code/User/settings.json" "$repo/common/vscode/settings.json"
           check "$HOME/.zshrc"                          "$repo/linux/zsh/.zshrc"
           exit $fail
+
+  install-windows:
+    name: Install profile — Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run install-windows-copy.ps1
+        shell: pwsh
+        run: scripts/install-windows-copy.ps1
+
+      - name: Verify copied files
+        shell: pwsh
+        run: |
+          $fail = $false
+          $repo = $env:GITHUB_WORKSPACE
+          $checks = @(
+            @{ Dest = "$env:USERPROFILE\.bashrc";         Src = "common/bash/.bashrc" },
+            @{ Dest = "$env:USERPROFILE\.bash_profile";   Src = "common/bash/.bash_profile" },
+            @{ Dest = "$env:USERPROFILE\.aliases";        Src = ".aliases" },
+            @{ Dest = "$env:USERPROFILE\.exports";        Src = ".exports" },
+            @{ Dest = "$env:USERPROFILE\adisakshya.yaml"; Src = "common/oh-my-posh/adisakshya.yaml" },
+            @{ Dest = "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"; Src = "windows/powershell/profile.ps1" },
+            @{ Dest = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1";        Src = "windows/powershell/profile.ps1" },
+            @{ Dest = "$env:APPDATA\Code\User\settings.json";                                                                                          Src = "common/vscode/settings.json" },
+            @{ Dest = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json";        Src = "windows/windows-terminal/settings.json" },
+            @{ Dest = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe\LocalState\settings.json"; Src = "windows/windows-terminal/settings.json" }
+          )
+          foreach ($check in $checks) {
+            if (-not (Test-Path $check.Dest)) {
+              Write-Host "FAIL: $($check.Dest) does not exist"
+              $fail = $true
+            } else {
+              $destContent = Get-Content $check.Dest -Raw
+              $srcContent  = Get-Content (Join-Path $repo $check.Src) -Raw
+              if ($destContent -ne $srcContent) {
+                Write-Host "FAIL: $($check.Dest) content differs from source"
+                $fail = $true
+              } else {
+                Write-Host "OK:   $($check.Dest)"
+              }
+            }
+          }
+          if ($fail) { exit 1 }
