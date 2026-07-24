@@ -11,7 +11,7 @@ Adisakshya's dotfiles!
 
 - **Git for Windows** (includes Git Bash) — required to run the install scripts. Download from <https://git-scm.com/downloads>.
 - **GNU Make** — install via `winget install GnuWin32.Make`.
-- **Developer Mode enabled *or* an elevated (Administrator) shell** — required for symlink creation. Enable Developer Mode under *Settings → Privacy & security → For developers*, or open a terminal as Administrator. Without one of these, Dotbot will fail to create symlinks mid-install.
+- **Developer Mode enabled *or* an elevated (Administrator) shell** *(required for `make windows` only)* — required for symlink creation. Enable Developer Mode under *Settings → Privacy & security → For developers*, or open a terminal as Administrator. Without one of these, Dotbot will fail to create symlinks mid-install. If you cannot meet this requirement, use `make windows-copy` instead (see [Managed / work machines](#managed--work-machines----make-windows-copy-copy-based-no-admin-required) below).
 - **PowerShell execution policy** — local scripts must be allowed to run:
   ```powershell
   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
@@ -60,8 +60,45 @@ After installing these prerequisites the symlinks are created for the chosen pro
 
 ### On Windows
 
+#### Personal machines — `make windows` (symlink-based, recommended)
+
+On machines where you control Developer Mode, install with symlinks so any future edits to files in `~/.dotfiles` are reflected immediately without re-running the installer:
+
 ```bash
 make windows
+```
+
+Requires **Developer Mode** or an **elevated (Administrator) shell** — see [Prerequisites → Windows](#windows) above.
+
+#### Managed / work machines — `make windows-copy` (copy-based, no admin required)
+
+On managed or work laptops where Developer Mode is unavailable or administrator access is restricted, use the copy-based installer instead:
+
+```bash
+make windows-copy
+```
+
+No UAC prompt and no Developer Mode are required. The following 10 files are installed as plain copies:
+
+| Source | Destination |
+|---|---|
+| `common/bash/.bashrc` | `~/.bashrc` |
+| `common/bash/.bash_profile` | `~/.bash_profile` |
+| `.aliases` | `~/.aliases` |
+| `.exports` | `~/.exports` |
+| `common/oh-my-posh/adisakshya.yaml` | `~/adisakshya.yaml` |
+| `windows/powershell/profile.ps1` | `~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1` |
+| `windows/powershell/profile.ps1` | `~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1` |
+| `common/vscode/settings.json` | `~/AppData/Roaming/Code/User/settings.json` |
+| `windows/windows-terminal/settings.json` | Windows Terminal `LocalState/settings.json` (stable) |
+| `windows/windows-terminal/settings.json` | Windows Terminal `LocalState/settings.json` (Preview) |
+
+**Tradeoff:** Because the files are copies rather than symlinks, changes you make to dotfiles in `~/.dotfiles` are not automatically reflected at the destinations. Re-run `make windows-copy` after editing your dotfiles to sync the changes.
+
+**Backups:** Any existing file at a destination is backed up to `~/.dotfiles-backups/<timestamp>/` before being overwritten. You can preview what would be copied without making any changes by running:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/install-windows-copy.ps1 -WhatIf
 ```
 
 ### On Linux
