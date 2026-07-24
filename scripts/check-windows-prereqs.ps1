@@ -47,6 +47,15 @@ if (Get-Command make -ErrorAction SilentlyContinue) {
     $errors += "Make is not installed. Run: winget install GnuWin32.Make"
 }
 
+# --- Python (required by dotbot for the symlink-based install) ---
+$pythonFound = (Get-Command python -ErrorAction SilentlyContinue) -or (Get-Command python3 -ErrorAction SilentlyContinue)
+if ($pythonFound) {
+    Write-Host "[OK] Python found." -ForegroundColor Green
+} else {
+    Write-Host "[FAIL] Python not found — install from https://python.org or via winget: winget install Python.Python.3" -ForegroundColor Red
+    $errors += "Python is not installed. Install from https://python.org or run: winget install Python.Python.3"
+}
+
 # --- Symlink capability (Developer Mode or elevation) ---
 # Skipped when -SkipSymlinkCheck is passed (e.g. for the copy-based install).
 if (-not $SkipSymlinkCheck) {
