@@ -13,11 +13,12 @@ ZSH_SYNTAX_HIGHLIGHTING_COMMIT := 1d85c692615a25fe2293bdd44b34c217d5d2bf04
 ZSH_AUTOSUGGESTIONS_COMMIT := 85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
 
 # PHONY
-.PHONY: windows linux win lin
+.PHONY: windows linux win lin check-devmode windows-copy
 
 help :
-	@echo "windows : Bootstrap and install dotfiles for Windows"
-	@echo "linux   : Bootstrap and install dotfiles for Linux"
+	@echo "windows      : Bootstrap and install dotfiles for Windows"
+	@echo "windows-copy : Install dotfiles using file copies (no Developer Mode required)"
+	@echo "linux        : Bootstrap and install dotfiles for Linux"
 
 win:
 	@echo "Did you mean 'make windows'? Running it now..."
@@ -35,8 +36,17 @@ bootstrap-windows:
 	@echo "-> Installing pinned oh-my-posh"
 	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-windows-tools.ps1
 
-windows: bootstrap-windows
+windows: check-devmode bootstrap-windows
 	./install-profile windows
+
+check-devmode:
+	@powershell -NoProfile -Command \
+		"if ((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense -ne 1) { \
+			Write-Warning 'Developer Mode is not enabled. Symlink creation may fail. Run make windows-copy instead for a no-admin install.' \
+		}"
+
+windows-copy: bootstrap-windows
+	powershell -ExecutionPolicy Bypass -File scripts/install-windows-copy.ps1
 
 bootstrap-linux:
 	@echo "Install Powerline font - Source Code Pro - https://github.com/powerline/fonts"
