@@ -72,7 +72,15 @@ Requires **Developer Mode** or an **elevated (Administrator) shell** — see [Pr
 
 #### Managed / work machines — `make windows-copy` (copy-based, no admin required)
 
-On managed or work laptops where Developer Mode is unavailable or administrator access is restricted, use the copy-based installer instead:
+On managed or work laptops where Developer Mode is unavailable or administrator access is restricted, use the copy-based installer instead.
+
+**Fresh machine (no Make installed yet)?** Use the PowerShell entry point — it requires nothing beyond what ships with Windows 10+:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File install-windows.ps1
+```
+
+Once Make is available, you can use the equivalent Makefile target instead:
 
 ```bash
 make windows-copy
