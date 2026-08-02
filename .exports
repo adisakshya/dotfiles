@@ -1,9 +1,3 @@
-# set USER
-export USER="$(whoami)";
-
-# Set bash as shell
-shell="$(which bash)";
-
-# Language preference
-export LANG="en_US.UTF-8";
-export LC_ALL="en_US.UTF-8";
+# Shared environment exports belong here. Do not replace identity variables or
+# force a locale: Codespaces and other containers provide environment-specific
+# values, and a locale must not be selected unless it is installed.

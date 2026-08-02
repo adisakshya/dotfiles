@@ -55,9 +55,11 @@ if command -v oh-my-posh >/dev/null 2>&1; then
     eval "$(oh-my-posh init bash --config "$HOME/adisakshya.yaml")"
 fi
 
-# Disable highlighting
-LS_COLORS=$LS_COLORS:'ow=1;34:' ; export LS_COLORS
+# Disable highlighting for other-writable directories. Preserve an empty or
+# unset LS_COLORS value on minimal container images.
+LS_COLORS="${LS_COLORS:-}:ow=1;34:"
+export LS_COLORS
 
-# Install Ruby Gems to ~/gems'
-export GEM_HOME="${HOME}/gems" >> ~/.bashrc
-export PATH="${HOME}/gems/bin:${PATH}" >> ~/.bashrc
+# Install Ruby Gems to ~/gems.
+export GEM_HOME="${HOME}/gems"
+export PATH="${GEM_HOME}/bin:${PATH}"

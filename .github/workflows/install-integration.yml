@@ -90,9 +90,18 @@ jobs:
           check "$HOME/.bash_profile"                   "$repo/common/bash/.bash_profile"
           check "$HOME/.aliases"                        "$repo/.aliases"
           check "$HOME/.exports"                        "$repo/.exports"
-          check "$HOME/adisakshya.yaml"                 "$repo/common/oh-my-posh/adisakshya.yaml"
-          check "$HOME/.config/Code/User/settings.json" "$repo/common/vscode/settings.json"
-          check "$HOME/.zshrc"                          "$repo/linux/zsh/.zshrc"
+          check_absent() {
+            local path="$1"
+            if [ -e "$path" ] || [ -L "$path" ]; then
+              echo "FAIL: $path should not be created by the minimal Codespaces profile"
+              fail=1
+              return
+            fi
+            echo "OK:   $path is absent"
+          }
+          check_absent "$HOME/adisakshya.yaml"
+          check_absent "$HOME/.config/Code/User/settings.json"
+          check_absent "$HOME/.zshrc"
           exit $fail
 
   install-windows:
