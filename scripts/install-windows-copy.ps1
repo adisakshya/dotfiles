@@ -47,8 +47,6 @@ $Copies = @(
     # powershell — both Windows PowerShell and PowerShell 7+
     @( "windows/powershell/profile.ps1",       (Join-Path $HOME "Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1") ),
     @( "windows/powershell/profile.ps1",       (Join-Path $HOME "Documents\PowerShell\Microsoft.PowerShell_profile.ps1") ),
-    # vscode
-    @( "common/vscode/settings.json",          (Join-Path $HOME "AppData\Roaming\Code\User\settings.json") ),
     # windows terminal (stable)
     @( "windows/windows-terminal/settings.json",
        (Join-Path $HOME "AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json") ),
