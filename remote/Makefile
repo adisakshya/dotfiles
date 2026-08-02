@@ -1,3 +1,9 @@
+# Optional installers for a local Debian/Ubuntu Linux environment.
+#
+# This Makefile is not used by GitHub Codespaces or Google Colab. GitHub owns
+# the Codespaces editor and remote service; the repository's Codespaces entry
+# point only installs the shell/CLI profile documented in ../README.md.
+
 # Default target
 .DEFAULT_GOAL := help
 
@@ -7,30 +13,22 @@ GTOP_VERSION := 1.1.5
 DOCKER_GPG_SHA256 := 1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570
 DOWNLOAD_VERIFIED := ../scripts/download-verified
 
-.PHONY: bootstrap jekyll docker neo4j install-ngrok
+.PHONY: help bootstrap jekyll docker neo4j
 
 help :
 	@echo "bootstrap     : Bootstrap Environment"
-	@echo "install-ngrok : Install ngrok v3"
 	@echo "jekyll        : Install Jekyll"
 	@echo "docker        : Install Docker"
-	@echo "neo4j         : Install Neo4j"
 
 bootstrap:
 	@echo "-> Bootstraping Environment"
 	sudo apt update
 	@echo "--> Installing required tools and utilities"
-	sudo apt install build-essential httpie nano software-properties-common ca-certificates gnupg lsb-release openssh-server
+	sudo apt install build-essential httpie nano software-properties-common ca-certificates gnupg lsb-release
 	@echo "--> Installing pinned NPM utilities (registry integrity is verified by npm)"
 	npm install -g npm@$(NPM_VERSION)
 	npm install -g gtop@$(GTOP_VERSION)
 	@echo "-> Bootstrap Complete"
-
-install-ngrok:
-	@command -v ngrok >/dev/null 2>&1 && echo "ngrok already installed, skipping." && exit 0; \
-	curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
-	echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list && \
-	sudo apt-get update && sudo apt-get install -y ngrok
 
 jekyll:
 	@command -v jekyll >/dev/null 2>&1 && echo "jekyll already installed, skipping." && exit 0; \
@@ -51,6 +49,8 @@ docker:
 	sudo apt-get update && \
 	sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
+# Unsupported legacy placeholder: intentionally omitted from `make help`.
+# It remains temporarily to avoid expanding this cleanup into a Neo4j redesign.
 neo4j:
 	@echo "-> Installing Neo4j"
 	@echo "-> Neo4j installtion complete"
