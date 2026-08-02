@@ -242,11 +242,13 @@ The audited manifest is available in the
 #### Windows migration
 
 Dotfiles no longer links or copies `%APPDATA%\Code\User\settings.json`. Existing
-files are left untouched, so current Windows installations keep working. Before
-the next dotfiles install, enable Settings Sync in desktop VS Code to migrate
-preferences and extensions. After confirming synchronization on another VS Code
-instance, the old settings file may be removed manually. Windows Terminal and
-PowerShell configuration remain managed exactly as before.
+standalone files are left untouched. On the first install after this change, a
+dangling symlink created by the former Windows or Linux profile is recognized by
+its legacy target and replaced with a standalone copy of the previous settings;
+unrelated symlinks are not changed. Enable Settings Sync in desktop VS Code to
+migrate those preferences and extensions. After confirming synchronization on
+another VS Code instance, the old settings file may be removed manually. Windows
+Terminal and PowerShell configuration remain managed exactly as before.
 
 ### Rebuilding after updating dotfiles
 

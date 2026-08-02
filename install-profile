@@ -46,6 +46,10 @@ if $dry_run; then
     exit 0
 fi
 
+# Recover settings for users whose old repository-managed link became dangling
+# when VS Code ownership moved to Settings Sync.
+"${BASE_DIR}/scripts/migrate-vscode-settings"
+
 git submodule update --init --recursive
 
 "${BASE_DIR}/scripts/backup-dotfiles" "${config_files[@]}"
