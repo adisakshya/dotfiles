@@ -1,3 +1,10 @@
 # Shared environment exports belong here. Do not replace identity variables or
 # force a locale: Codespaces and other containers provide environment-specific
 # values, and a locale must not be selected unless it is installed.
+
+# Enable 24-bit (true) colour and confirm 256-colour xterm support.
+# These match the terminal capabilities set in the Windows Terminal profile so
+# that prompt colours, syntax highlighting, and git diff colours render
+# consistently across environments.
+export COLORTERM=truecolor
+export TERM=xterm-256color

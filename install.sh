@@ -14,6 +14,17 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "==> Setting up dotfiles..."
 
 # ------------------------------------------------------------------
+# Font installation
+# Install the Powerline font package so that Source Code Pro for
+# Powerline renders correctly in the Codespaces integrated terminal,
+# matching the font configured in the Windows Terminal profile.
+# ------------------------------------------------------------------
+if command -v apt-get >/dev/null 2>&1; then
+    echo "==> Installing fonts-powerline..."
+    sudo apt-get install -y --no-install-recommends fonts-powerline
+fi
+
+# ------------------------------------------------------------------
 # Dotbot profile
 # Initialises git submodules (which include Dotbot itself) and then
 # creates the symlinks defined in meta/profiles/codespaces.
