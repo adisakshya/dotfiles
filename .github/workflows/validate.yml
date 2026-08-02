@@ -42,6 +42,13 @@ jobs:
           python -c "import yaml; yaml.safe_load(open('meta/base.yaml'))"
           python -c "import yaml; yaml.safe_load(open('meta/force-links-after-backup.yaml'))"
 
+  json-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate repository-owned JSON
+        run: python -m json.tool windows/windows-terminal/settings.json >/dev/null
+
   makefile-syntax:
     runs-on: ubuntu-latest
     steps:
