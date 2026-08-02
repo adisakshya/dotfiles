@@ -212,6 +212,23 @@ replaced.
 optional tools such as NVM and Oh My Posh before initializing them, so tools
 provided by a project can integrate without being required by this profile.
 
+### Manual blank-Codespace release check
+
+Before releasing installer or profile changes, create a blank Codespace with
+dotfiles enabled and confirm that:
+
+1. creation completes without a dotfiles installation error;
+2. `~/.bashrc`, `~/.bash_profile`, `~/.aliases`, and `~/.exports` are symlinks
+   into this repository;
+3. `./install.sh` succeeds again from the cloned dotfiles directory; and
+4. a new interactive Bash terminal opens without startup errors, including
+   when optional tools such as NVM and Oh My Posh are absent.
+
+The automated checks validate only this repository's installer, managed files,
+and shell behavior. They do not validate GitHub's Codespaces provisioning,
+browser connectivity, network routing, or the complete hosted service; the
+blank-Codespace check remains the final release verification.
+
 ### VS Code ownership model
 
 VS Code customization uses three deliberately separate layers:
