@@ -201,13 +201,17 @@ The `install.sh` entrypoint runs Dotbot with the `codespaces` profile (`meta/pro
 |---|---|
 | `bash` | `~/.bashrc` and `~/.bash_profile` |
 | `essentials` | `~/.aliases` and `~/.exports` |
-| `oh-my-posh` | `~/adisakshya.yaml` (prompt theme) |
-| `vscode` | VS Code / Code Server `settings.json` |
-| `zsh` | `~/.zshrc` |
 
-Windows-only configs (`powershell`, `windows-terminal`) and font files are intentionally excluded — they have no effect in a Linux container.
+The profile is intentionally minimal. It does not install or configure Zsh,
+Oh My Zsh, Oh My Posh, fonts, editor settings, language runtimes, databases,
+ports, or services. Those dependencies and settings remain owned by each
+repository's dev container. Existing Bash and essentials files are backed up
+using the [documented policy](#existing-files-and-dry-runs) before they are
+replaced.
 
-> **Note:** `install.sh` creates the config symlinks but does not install `oh-my-posh` or `oh-my-zsh`. If you want the full prompt experience inside a Codespace, add a [devcontainer feature](https://containers.dev/features) or a `postCreateCommand` in your project's `devcontainer.json` to install those tools, or run `make linux` from the dotfiles directory after the Codespace starts.
+`install.sh` is non-interactive and safe to rerun. Shell startup checks for
+optional tools such as NVM and Oh My Posh before initializing them, so tools
+provided by a project can integrate without being required by this profile.
 
 ### Rebuilding after updating dotfiles
 
@@ -218,11 +222,6 @@ cd ~/.dotfiles && git pull && ./install.sh
 ```
 
 Or use **Codespaces → Rebuild container** from the VS Code command palette to get a completely fresh environment.
-
-### Known limitations
-
-- **Fonts** — Powerline / Source Code Pro fonts cannot be installed inside the container. In the browser-based editor, any configured Nerd Font will fall back to the browser's default monospace font. When connecting via a local VS Code client, configure the font in your *local* VS Code settings instead.
-- **oh-my-posh / oh-my-zsh** — `install.sh` creates the config symlinks but does not install these tools. Without them the `~/.zshrc` prompt line will produce an error on first launch; bash is unaffected.
 
 ## Contents
 

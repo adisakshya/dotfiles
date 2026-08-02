@@ -4,7 +4,6 @@
 # Pinned upstream versions. See ../README.md before updating.
 NPM_VERSION := 12.0.1
 GTOP_VERSION := 1.1.5
-LOCALTUNNEL_VERSION := 2.0.2
 CODE_SERVER_VERSION := 4.130.0
 EXTENSION_PACK_VERSION := 1.0.0
 EXTENSION_PACK_SHA256 := 40711c68fe626c202a2fc98f9916ec7e7c0db9d6538394d87d06d7a110d60615
@@ -29,7 +28,6 @@ bootstrap:
 	@echo "--> Installing pinned NPM utilities (registry integrity is verified by npm)"
 	npm install -g npm@$(NPM_VERSION)
 	npm install -g gtop@$(GTOP_VERSION)
-	npm install -g localtunnel@$(LOCALTUNNEL_VERSION)
 	@echo "-> Bootstrap Complete"
 
 install-ngrok:

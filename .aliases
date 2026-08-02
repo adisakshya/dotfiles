@@ -29,9 +29,6 @@ alias httpserve='python -m http.server'
 # Weather
 alias weather='curl wttr.in'
 
-# Remote playground
-alias playground='python -m webbrowser -t "https://colab.research.google.com/github/adisakshya/playground/blob/master/remote/playground.ipynb"'
-
 # Google Docs
 alias doc='python -m webbrowser -t "https://doc.new"'
 
@@ -52,9 +49,3 @@ alias jn='py -m notebook'
 
 # Extract .tar.gz
 alias extract='tar -xvzf'
-
-# Expose port using localtunnel
-alias expose='function expose_port(){ nohup lt --port &1 > logs/$2.out 2> logs/$2.err & };expose_port && cat $2.out'
-
-# Remote installer
-alias ins='function install(){ make $@ -C ~/.dotfiles/remote; };install'
