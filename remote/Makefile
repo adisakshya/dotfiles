@@ -25,7 +25,7 @@ bootstrap:
 	@echo "-> Bootstraping Environment"
 	sudo apt update
 	@echo "--> Installing required tools and utilities"
-	sudo apt install build-essential httpie nano software-properties-common ca-certificates gnupg lsb-release openssh-server
+	sudo apt install build-essential httpie nano software-properties-common ca-certificates gnupg lsb-release
 	@echo "--> Installing pinned NPM utilities (registry integrity is verified by npm)"
 	npm install -g npm@$(NPM_VERSION)
 	npm install -g gtop@$(GTOP_VERSION)
