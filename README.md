@@ -86,7 +86,7 @@ Once Make is available, you can use the equivalent Makefile target instead:
 make windows-copy
 ```
 
-No UAC prompt and no Developer Mode are required. The following 10 files are installed as plain copies:
+No UAC prompt and no Developer Mode are required. The following 9 files are installed as plain copies:
 
 | Source | Destination |
 |---|---|
@@ -97,7 +97,6 @@ No UAC prompt and no Developer Mode are required. The following 10 files are ins
 | `common/oh-my-posh/adisakshya.yaml` | `~/adisakshya.yaml` |
 | `windows/powershell/profile.ps1` | `~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1` |
 | `windows/powershell/profile.ps1` | `~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1` |
-| `common/vscode/settings.json` | `~/AppData/Roaming/Code/User/settings.json` |
 | `windows/windows-terminal/settings.json` | Windows Terminal `LocalState/settings.json` (stable) |
 | `windows/windows-terminal/settings.json` | Windows Terminal `LocalState/settings.json` (Preview) |
 
@@ -213,6 +212,44 @@ replaced.
 optional tools such as NVM and Oh My Posh before initializing them, so tools
 provided by a project can integrate without being required by this profile.
 
+### VS Code ownership model
+
+VS Code customization uses three deliberately separate layers:
+
+1. **Settings Sync is the source of truth for personal editor preferences and
+   generally useful personal extensions.** Enable Settings Sync while signed in
+   to VS Code and select Settings and Extensions. This applies equally to
+   desktop VS Code on Windows/Linux and to Codespaces.
+2. **Each repository's `.devcontainer/devcontainer.json` owns extensions needed
+   to build, test, debug, or operate that repository.** Add those extension IDs
+   under `customizations.vscode.extensions`; do not put project dependencies in
+   this dotfiles repository or rely on another developer's synchronized list.
+3. **Dotfiles owns shell and CLI personalization only in Codespaces.** It does
+   not write VS Code settings, install extensions, or install/manage
+   code-server. GitHub owns the Codespaces VS Code server lifecycle.
+
+The former `adisakshya.adisakshya-extension-pack` is not installed. Its 1.0.0
+manifest bundles 20 extensions spanning personal UI choices (themes, icons,
+Peacock), general editing tools (Prettier, EditorConfig, GitLens), language and
+project tooling (Python, Pylance, C/C++, Docker), and desktop/remote workflow
+tools (Remote Extension Pack). Although many members can run remotely, the
+collection is not a coherent Codespaces baseline: project tooling belongs in a
+devcontainer, personal choices belong in Settings Sync, and desktop remote
+tools are unnecessary inside a Codespace. Therefore no smaller pack is retained.
+The audited manifest is available in the
+[extension-pack repository](https://github.com/adisakshya/extension-pack/blob/2f4364ee64241ebf218c3902dfb645a32a112bb8/package.json).
+
+#### Windows migration
+
+Dotfiles no longer links or copies `%APPDATA%\Code\User\settings.json`. Existing
+standalone files are left untouched. On the first install after this change, a
+dangling symlink created by the former Windows or Linux profile is recognized by
+its legacy target and replaced with a standalone copy of the previous settings;
+unrelated symlinks are not changed. Enable Settings Sync in desktop VS Code to
+migrate those preferences and extensions. After confirming synchronization on
+another VS Code instance, the old settings file may be removed manually. Windows
+Terminal and PowerShell configuration remain managed exactly as before.
+
 ### Rebuilding after updating dotfiles
 
 Changes you push to this repository are picked up the next time a Codespace is created. To apply them to an existing Codespace without creating a new one:
@@ -242,7 +279,6 @@ meta
     ├── <a href="./meta/configs/essentials.yaml" title="essentials.yaml">essentials.yaml</a>
     ├── <a href="./meta/configs/oh-my-posh.yaml" title="oh-my-posh.yaml">oh-my-posh.yaml</a>
     ├── <a href="./meta/configs/powershell.yaml" title="powershell.yaml">powershell.yaml</a>
-    ├── <a href="./meta/configs/vscode.yaml" title="vscode.yaml">vscode.yaml</a>
     ├── <a href="./meta/configs/windows-terminal.yaml" title="windows-terminal.yaml">windows-terminal.yaml</a>
     └── <a href="./meta/configs/zsh.yaml" title="zsh.yaml">zsh.yaml</a>
 </pre>

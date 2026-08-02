@@ -32,6 +32,21 @@ $BackupRoot = Join-Path $env:USERPROFILE ".dotfiles-backups"
 $Timestamp  = Get-Date -Format "yyyyMMdd-HHmmss"
 $BackupDir  = Join-Path $BackupRoot $Timestamp
 
+# The former symlink install pointed here. After the linked repository file was
+# retired, replace only that known dangling link with an independent copy.
+$LegacySettings = Join-Path $HOME "AppData\Roaming\Code\User\settings.json"
+$LegacyTemplate = Join-Path $RepoRoot "scripts\migrations\vscode-settings.json"
+$LegacyItem = Get-Item -LiteralPath $LegacySettings -Force -ErrorAction SilentlyContinue
+if ($null -ne $LegacyItem -and $LegacyItem.LinkType -eq 'SymbolicLink' -and
+    -not (Test-Path -LiteralPath $LegacySettings) -and
+    (($LegacyItem.Target -join '') -replace '\\', '/') -like '*/common/vscode/settings.json') {
+    if ($PSCmdlet.ShouldProcess($LegacySettings, 'Replace legacy dangling symlink with standalone settings')) {
+        Remove-Item -LiteralPath $LegacySettings -Force
+        Copy-Item -LiteralPath $LegacyTemplate -Destination $LegacySettings
+        Write-Host "Migrated legacy VS Code settings symlink to a standalone file: $LegacySettings"
+    }
+}
+
 # ---------------------------------------------------------------------------
 # File list: each entry is [RelativeSourcePath, AbsoluteDestinationPath]
 # ---------------------------------------------------------------------------
@@ -47,8 +62,6 @@ $Copies = @(
     # powershell — both Windows PowerShell and PowerShell 7+
     @( "windows/powershell/profile.ps1",       (Join-Path $HOME "Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1") ),
     @( "windows/powershell/profile.ps1",       (Join-Path $HOME "Documents\PowerShell\Microsoft.PowerShell_profile.ps1") ),
-    # vscode
-    @( "common/vscode/settings.json",          (Join-Path $HOME "AppData\Roaming\Code\User\settings.json") ),
     # windows terminal (stable)
     @( "windows/windows-terminal/settings.json",
        (Join-Path $HOME "AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json") ),

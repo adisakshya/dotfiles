@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Materialize settings left behind by the former Dotbot-managed VS Code link.
+# This is intentionally a narrow, one-time migration: ordinary settings files
+# and symlinks owned by the user are never changed.
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LEGACY_SETTINGS="$ROOT/scripts/migrations/vscode-settings.json"
+
+migrate_legacy_link() {
+    local destination=$1 target temporary
+
+    [[ -L $destination && ! -e $destination ]] || return 0
+    target=$(readlink "$destination")
+    case "${target//\\//}" in
+        */common/vscode/settings.json) ;;
+        *) return 0 ;;
+    esac
+
+    temporary="${destination}.dotfiles-migration.$$"
+    cp "$LEGACY_SETTINGS" "$temporary"
+    mv -f "$temporary" "$destination"
+    echo "Migrated legacy VS Code settings symlink to a standalone file: $destination"
+}
+
+migrate_legacy_link "$HOME/.config/Code/User/settings.json"
+migrate_legacy_link "$HOME/AppData/Roaming/Code/User/settings.json"

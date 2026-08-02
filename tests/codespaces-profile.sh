@@ -9,6 +9,12 @@ trap 'rm -rf "$TEST_HOME"' EXIT
 expected_profile=$'bash\nessentials'
 [[ $(cat "$ROOT/meta/profiles/codespaces") == "$expected_profile" ]]
 
+# Editor state is never owned by the Codespaces profile, and this repository
+# must not manage a Codespaces server.
+! grep -q 'vscode' "$ROOT/meta/profiles/codespaces"
+! find "$ROOT/meta/configs" -type f -exec grep -q 'code-server' {} +
+! grep -qE '(^|[[:space:]])code:' "$ROOT/remote/Makefile"
+
 printf 'original bashrc\n' > "$TEST_HOME/.bashrc"
 
 run_install() {

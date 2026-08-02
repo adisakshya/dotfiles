@@ -48,7 +48,6 @@ jobs:
           check "$HOME/.aliases"                        "$repo/.aliases"
           check "$HOME/.exports"                        "$repo/.exports"
           check "$HOME/adisakshya.yaml"                 "$repo/common/oh-my-posh/adisakshya.yaml"
-          check "$HOME/.config/Code/User/settings.json" "$repo/common/vscode/settings.json"
           check "$HOME/.zshrc"                          "$repo/linux/zsh/.zshrc"
           exit $fail
 
@@ -110,6 +109,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Seed unmanaged VS Code settings
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force "$env:APPDATA\Code\User" | Out-Null
+          Set-Content "$env:APPDATA\Code\User\settings.json" '{"settingsSync":"owned"}' -NoNewline
+
       - name: Run install-windows-copy.ps1
         shell: pwsh
         run: scripts/install-windows-copy.ps1
@@ -127,7 +132,6 @@ jobs:
             @{ Dest = "$env:USERPROFILE\adisakshya.yaml"; Src = "common/oh-my-posh/adisakshya.yaml" },
             @{ Dest = "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"; Src = "windows/powershell/profile.ps1" },
             @{ Dest = "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1";        Src = "windows/powershell/profile.ps1" },
-            @{ Dest = "$env:APPDATA\Code\User\settings.json";                                                                                          Src = "common/vscode/settings.json" },
             @{ Dest = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json";        Src = "windows/windows-terminal/settings.json" },
             @{ Dest = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe\LocalState\settings.json"; Src = "windows/windows-terminal/settings.json" }
           )
@@ -145,5 +149,11 @@ jobs:
                 Write-Host "OK:   $($check.Dest)"
               }
             }
+          }
+          if ((Get-Content "$env:APPDATA\Code\User\settings.json" -Raw) -ne '{"settingsSync":"owned"}') {
+            Write-Host "FAIL: VS Code settings were modified"
+            $fail = $true
+          } else {
+            Write-Host "OK:   VS Code settings remain unmanaged"
           }
           if ($fail) { exit 1 }
