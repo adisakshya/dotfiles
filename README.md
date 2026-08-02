@@ -180,6 +180,19 @@ To remove managed symlinks, manually delete the symlinks listed in the YAML file
 
 After removing symlinks, restore the original files from the `~/.dotfiles-backups/` directory created during installation.
 
+## Optional local Linux tooling
+
+`remote/Makefile` is retained as an opt-in collection of installers for a local
+Debian or Ubuntu environment. Run its advertised targets explicitly with
+`make -C remote <target>`; it is not part of any Dotfiles profile or automatic
+bootstrap path. In particular, GitHub Codespaces and Google Colab do not use
+this Makefile. GitHub provides and operates the Codespaces editor and remote
+service, while this repository only personalises the shell and CLI there.
+
+The `neo4j` recipe is a nonfunctional legacy placeholder. It is intentionally
+not advertised by `make -C remote help`; replacing or removing it belongs in a
+separate, focused cleanup.
+
 ## GitHub Codespaces
 
 GitHub Codespaces supports automatic dotfiles personalisation: when you create a new Codespace, GitHub clones your dotfiles repository and runs the first recognised entrypoint it finds (`install.sh`, `bootstrap.sh`, `setup.sh`, or `script/setup`).
