@@ -142,7 +142,9 @@ jobs:
             } else {
               $destContent = Get-Content $check.Dest -Raw
               $srcContent  = Get-Content (Join-Path $repo $check.Src) -Raw
-              if ($destContent -ne $srcContent) {
+              $destContentNormalized = $destContent -replace "`r`n", "`n"
+              $srcContentNormalized  = $srcContent  -replace "`r`n", "`n"
+              if ($destContentNormalized -ne $srcContentNormalized) {
                 Write-Host "FAIL: $($check.Dest) content differs from source"
                 $fail = $true
               } else {
